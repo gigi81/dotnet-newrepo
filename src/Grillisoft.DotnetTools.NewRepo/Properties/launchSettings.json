@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Grillisoft.DotnetTools.NewRepo": {
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Temp\\testrepo"
+    }
+  }
+}
