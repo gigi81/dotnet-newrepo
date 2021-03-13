@@ -33,7 +33,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                await this.CreateTextFile(this.Root.File(Name), responseBody, _logger);
+                await this.CreateTextFile(this.Root.File(Name), responseBody);
             }
         }
     }

@@ -68,9 +68,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
             }
         }
 
-        protected async Task CreateTextFile(FileInfo file, string content, ILogger logger)
+        protected async Task CreateTextFile(FileInfo file, string content)
         {
-            logger.LogInformation("Creating file {0}", file.FullName);
+            _logger.LogInformation("Creating file {0}", file.FullName);
             await file.CreateTextFile(content);
         }
     }

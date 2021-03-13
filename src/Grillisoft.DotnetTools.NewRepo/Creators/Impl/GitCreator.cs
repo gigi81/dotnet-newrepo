@@ -16,7 +16,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public async override Task Create(CancellationToken cancellationToken)
         {
             await Run("git", "init", cancellationToken);
-            await Run("git", "add -all", cancellationToken);
+            await Run("git", "add -A", cancellationToken);
             await Run("git", "commit -m \"Initial commit\"", cancellationToken);
         }
     }

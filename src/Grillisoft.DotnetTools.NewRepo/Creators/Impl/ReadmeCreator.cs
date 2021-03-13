@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,21 +10,40 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     {
         public string Name = "README.md";
 
+        private readonly IHttpClientFactory _httpClientFactory;
+
         public ReadmeCreator(
             NewRepoSettings options,
-            ILogger<ReadmeCreator> logger)
+            ILogger<ReadmeCreator> logger,
+            IHttpClientFactory httpClientFactory)
             : base(options, logger)
         {
+            _httpClientFactory = httpClientFactory;
         }
+
+        public string Url => $"https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/BLANK_README.md";
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            await this.CreateTextFile(this.Root.File(Name), GetContent(), _logger);
-        }
+            using (var client = _httpClientFactory.CreateClient())
+            {
+                _logger.LogInformation("Downloading {0} from {1}", Name, this.Url);
+                var response = await client.GetAsync(this.Url, cancellationToken);
+                response.EnsureSuccessStatusCode();
 
-        private string GetContent()
-        {
-            throw new NotImplementedException();
+                var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                responseBody = responseBody.Replace("github_username", _options.GithubUsername);
+                responseBody = responseBody.Replace("repo_name", _options.GithubRepoName);
+                responseBody = responseBody.Replace("twitter_handle", _options.TwitterUsername);
+                responseBody = responseBody.Replace("project_title", _options.Name);
+                responseBody = responseBody.Replace("project_description", _options.Product);
+
+                var index = responseBody.IndexOf("-->");
+                if (index > 0)
+                    responseBody = responseBody.Substring(index + 3);
+
+                await this.CreateTextFile(this.Root.File(Name), responseBody);
+            }
         }
     }
 }

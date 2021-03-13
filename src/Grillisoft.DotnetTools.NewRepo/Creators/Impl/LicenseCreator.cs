@@ -13,14 +13,14 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public LicenseCreator(
             NewRepoSettings options,
-            IHttpClientFactory httpClientFactory,
-            ILogger<LicenseCreator> logger)
+            ILogger<LicenseCreator> logger,
+            IHttpClientFactory httpClientFactory)
             : base(options, logger)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public string Url => $"https://github.com/spdx/license-list-data/blob/master/text/{_options.License}.txt";
+        public string Url => $"https://raw.githubusercontent.com/spdx/license-list-data/master/text/{_options.License}.txt";
 
         public override async Task Create(CancellationToken cancellationToken)
         {
@@ -31,10 +31,10 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 response.EnsureSuccessStatusCode();
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                responseBody = responseBody.Replace("<year>", _options.CopyrightYear.ToString());
-                responseBody = responseBody.Replace("<copyright holders>", _options.CopyrightHolders.ToString());
+                responseBody = responseBody.Replace("<year>", _options.CopyrightYear);
+                responseBody = responseBody.Replace("<copyright holders>", _options.CopyrightHolders);
 
-                await this.CreateTextFile(this.Root.File(Name), responseBody, _logger);
+                await this.CreateTextFile(this.Root.File(Name), responseBody);
             }
         }
     }

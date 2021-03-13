@@ -29,7 +29,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             foreach(var entry in dirs)
             {
                 var content = await GetTemplateContent(entry.Value + Name);
-                await this.CreateTextFile(entry.Key.File(Name), content, _logger);
+                await this.CreateTextFile(entry.Key.File(Name), content);
             }
         }
     }

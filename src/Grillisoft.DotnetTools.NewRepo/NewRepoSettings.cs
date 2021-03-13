@@ -8,7 +8,8 @@ namespace Grillisoft.DotnetTools.NewRepo
         private DirectoryInfo _root;
         private string _name;
         private string _copyrightOwner;
-        private int _copyrightYear;
+        private string _copyrightYear;
+        private string _githubRepoName;
 
         public NewRepoSettings(string[] args)
         {
@@ -33,9 +34,9 @@ namespace Grillisoft.DotnetTools.NewRepo
             set => _copyrightOwner = value;
         }
 
-        public int CopyrightYear
+        public string CopyrightYear
         {
-            get => _copyrightYear > 0 ? _copyrightYear : DateTime.UtcNow.Year;
+            get => GetOrDefault(_copyrightYear, DateTime.UtcNow.Year.ToString());
             set => _copyrightYear = value;
         }
 
@@ -54,6 +55,15 @@ namespace Grillisoft.DotnetTools.NewRepo
         public bool AzureDevops { get; set; } = true;
 
         public bool Appveyor { get; set; } = true;
+
+        public string GithubUsername { get; set; }
+
+        public string GithubRepoName
+        {
+            get => GetOrDefault(_githubRepoName, this.Name);
+            set => _githubRepoName = value; }
+
+        public string TwitterUsername { get; set; }
 
         private static string GetOrDefault(string value, string defaultValue)
         {

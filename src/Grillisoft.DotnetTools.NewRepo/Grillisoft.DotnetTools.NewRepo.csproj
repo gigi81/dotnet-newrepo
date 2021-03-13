@@ -6,12 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Templates\azure-pipelines.yml" />
     <None Remove="Templates\RootDirectory.Build.props" />
     <None Remove="Templates\SrcDirectory.Build.props" />
     <None Remove="Templates\TestsDirectory.Build.props" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Templates\azure-pipelines.yml" />
     <EmbeddedResource Include="Templates\RootDirectory.Build.props" />
     <EmbeddedResource Include="Templates\SrcDirectory.Build.props" />
     <EmbeddedResource Include="Templates\TestsDirectory.Build.props" />
