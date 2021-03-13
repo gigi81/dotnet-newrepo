@@ -6,16 +6,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
     public class DotnetCreator : CreatorBase
     {
-        private readonly NewRepoSettings _options;
-        private readonly ILogger<DotnetCreator> _logger;
-
         public DotnetCreator(
             NewRepoSettings options,
             ILogger<DotnetCreator> logger)
-            : base(options)
+            : base(options, logger)
         {
-            _options = options;
-            _logger = logger;
         }
 
         public async override Task Create(CancellationToken cancellationToken)

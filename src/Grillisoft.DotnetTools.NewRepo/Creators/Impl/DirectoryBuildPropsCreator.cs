@@ -10,16 +10,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     {
         public const string Name = "Directory.Build.props";
 
-        private readonly NewRepoSettings _options;
-        private readonly ILogger<DirectoryBuildPropsCreator> _logger;
-
         public DirectoryBuildPropsCreator(
             NewRepoSettings options,
             ILogger<DirectoryBuildPropsCreator> logger)
-            : base(options)
+            : base(options, logger)
         {
-            _options = options;
-            _logger = logger;
         }
 
         public override async Task Create(CancellationToken cancellationToken)

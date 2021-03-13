@@ -1,27 +1,26 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
-    public class GitIgnoreCreator : CreatorBase
+    public class LicenseCreator : CreatorBase
     {
-        public string Name = ".gitignore";
+        public string Name = "LICENSE.md";
 
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public GitIgnoreCreator(
+        public LicenseCreator(
             NewRepoSettings options,
             IHttpClientFactory httpClientFactory,
-            ILogger<GitIgnoreCreator> logger)
+            ILogger<LicenseCreator> logger)
             : base(options, logger)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public string Url => "https://www.toptal.com/developers/gitignore/api/" + string.Join(',', _options.GitIgnoreTags);
+        public string Url => $"https://github.com/spdx/license-list-data/blob/master/text/{_options.License}.txt";
 
         public override async Task Create(CancellationToken cancellationToken)
         {
@@ -32,6 +31,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 response.EnsureSuccessStatusCode();
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                responseBody = responseBody.Replace("<year>", _options.CopyrightYear.ToString());
+                responseBody = responseBody.Replace("<copyright holders>", _options.CopyrightHolders.ToString());
 
                 await this.CreateTextFile(this.Root.File(Name), responseBody, _logger);
             }

@@ -1,7 +1,6 @@
 ﻿using SimpleExec;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
@@ -15,13 +14,17 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
         private readonly DirectoryInfo _root;
         private readonly DirectoryInfo _src;
         private readonly DirectoryInfo _tests;
+        protected readonly NewRepoSettings _options;
+        protected readonly ILogger _logger;
 
-        public CreatorBase(NewRepoSettings options)
+        public CreatorBase(NewRepoSettings options, ILogger logger)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
 
-            _root = options.Root;
+            _options = options;
+            _logger = logger;
+            _root = _options.Root;
             _src = _root.SubDirectory("src");
             _tests = _root.SubDirectory("tests");
         }
