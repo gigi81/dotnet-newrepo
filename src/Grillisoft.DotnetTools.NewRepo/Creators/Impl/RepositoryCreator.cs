@@ -5,7 +5,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
     public class RepositoryCreator : CreatorBase
     {
-        public RepositoryCreator(NewRepoOptions options)
+        public RepositoryCreator(NewRepoSettings options)
             : base(options)
         {
         }

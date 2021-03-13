@@ -25,7 +25,7 @@ namespace Grillisoft.DotnetTools.NewRepo
                 {
                     services.AddHostedService<NewRepoService>()
                             .AddHttpClient()
-                            .AddSingleton(new NewRepoOptions(args))
+                            .AddSingleton(new NewRepoSettings(args))
                             //this MUST be the first one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()
                             .AddSingleton<ICreator, GitIgnoreCreator>()

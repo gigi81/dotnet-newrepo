@@ -10,11 +10,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     {
         public const string Name = "Directory.Build.props";
 
-        private readonly NewRepoOptions _options;
+        private readonly NewRepoSettings _options;
         private readonly ILogger<DirectoryBuildPropsCreator> _logger;
 
         public DirectoryBuildPropsCreator(
-            NewRepoOptions options,
+            NewRepoSettings options,
             ILogger<DirectoryBuildPropsCreator> logger)
             : base(options)
         {

@@ -16,7 +16,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
         private readonly DirectoryInfo _src;
         private readonly DirectoryInfo _tests;
 
-        public CreatorBase(NewRepoOptions options)
+        public CreatorBase(NewRepoSettings options)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));

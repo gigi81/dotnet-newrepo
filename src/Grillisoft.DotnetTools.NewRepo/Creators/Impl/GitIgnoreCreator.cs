@@ -12,11 +12,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         private readonly IHttpClientFactory _httpClientFactory;
 
-        private readonly NewRepoOptions _options;
+        private readonly NewRepoSettings _options;
         private readonly ILogger<GitIgnoreCreator> _logger;
 
         public GitIgnoreCreator(
-            NewRepoOptions options,
+            NewRepoSettings options,
             IHttpClientFactory httpClientFactory,
             ILogger<GitIgnoreCreator> logger)
             : base(options)

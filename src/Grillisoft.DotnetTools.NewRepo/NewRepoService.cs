@@ -10,13 +10,13 @@ namespace Grillisoft.DotnetTools.NewRepo
 {
     internal sealed class NewRepoService : IHostedService
     {
-        private readonly NewRepoOptions _options;
+        private readonly NewRepoSettings _options;
         private readonly IEnumerable<ICreator> _creators;
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
 
         public NewRepoService(
-            NewRepoOptions options,
+            NewRepoSettings options,
             IEnumerable<ICreator> creators,
             ILogger<NewRepoService> logger,
             IHostApplicationLifetime appLifetime)

@@ -6,11 +6,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
     public class DotnetCreator : CreatorBase
     {
-        private readonly NewRepoOptions _options;
+        private readonly NewRepoSettings _options;
         private readonly ILogger<DotnetCreator> _logger;
 
         public DotnetCreator(
-            NewRepoOptions options,
+            NewRepoSettings options,
             ILogger<DotnetCreator> logger)
             : base(options)
         {
