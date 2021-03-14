@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
@@ -24,8 +25,10 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 Run("dotnet", "new " + _options.TestFramework, tests, cancellationToken)
             );
 
-            foreach (var prj in this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories))
-                await Run("dotnet", "sln add \"" + prj.FullName + "\"", cancellationToken);
+            var projects = this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories)
+                               .Select(prj => "\"" + prj.FullName + "\"");
+
+            await Run("dotnet", "sln add " + string.Join(" ", projects), cancellationToken);
         }
     }
 }
