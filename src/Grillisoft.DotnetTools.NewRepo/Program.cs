@@ -17,6 +17,7 @@ namespace Grillisoft.DotnetTools.NewRepo
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
+                .UseConsoleLifetime() //ctrl+C support
                 .ConfigureLogging(logging =>
                 {
                     logging.AddConsole();

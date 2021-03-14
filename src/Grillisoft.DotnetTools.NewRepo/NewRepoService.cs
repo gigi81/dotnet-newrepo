@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
-    internal sealed class NewRepoService : IHostedService
+    internal sealed class NewRepoService : BackgroundService
     {
         private readonly NewRepoSettings _options;
         private readonly IEnumerable<ICreator> _creators;
@@ -27,37 +27,24 @@ namespace Grillisoft.DotnetTools.NewRepo
             _appLifetime = appLifetime;
         }
 
-        public Task StartAsync(CancellationToken token)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _appLifetime.ApplicationStarted.Register(() =>
+            try
             {
-                Task.Run(async () =>
-                {
-                    try
-                    {
-                        _logger.LogInformation("Creating dotnet repo in {0}", _options.Root.FullName);
+                _logger.LogInformation("Creating dotnet repo in {0}", _options.Root.FullName);
 
-                        foreach (var creator in _creators)
-                            await creator.Create(token);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Unhandled exception!");
-                    }
-                    finally
-                    {
-                        // Stop the application once the work is done
-                        _appLifetime.StopApplication();
-                    }
-                });
-            });
-
-            return Task.CompletedTask;
-        }
-
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
+                foreach (var creator in _creators)
+                    await creator.Create(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while creating dotnet repo:" + ex.Message);
+            }
+            finally
+            {
+                // Stop the application once the work is done
+                _appLifetime.StopApplication();
+            }
         }
     }
 }
