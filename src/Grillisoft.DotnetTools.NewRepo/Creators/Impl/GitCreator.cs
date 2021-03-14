@@ -13,6 +13,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         {
         }
 
+        public override bool IsParallel => false;
+
         public async override Task Create(CancellationToken cancellationToken)
         {
             await Run("git", "init", cancellationToken);

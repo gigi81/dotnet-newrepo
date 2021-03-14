@@ -6,5 +6,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
     public interface ICreator
     {
         Task Create(CancellationToken cancellationToken);
+
+        bool IsParallel { get; }
     }
 }

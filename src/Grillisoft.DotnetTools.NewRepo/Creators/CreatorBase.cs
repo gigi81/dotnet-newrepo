@@ -29,6 +29,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
             _tests = _root.SubDirectory("tests");
         }
 
+        public virtual bool IsParallel => true;
+
         public abstract Task Create(CancellationToken cancellationToken);
 
         public DirectoryInfo Root => _root;
