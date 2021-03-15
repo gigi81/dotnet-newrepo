@@ -1,0 +1,53 @@
+name: 0.0.1$(Rev:.r)
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  publishVstsFeed: ''
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: restore
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+    verbosityRestore: normal
+    includeNuGetOrg: true
+
+- task: VSBuild@1
+  displayName: build
+  inputs:
+    solution: '$(solution)'
+    msbuildArgs: '/p:Version=$(build.buildNumber) /p:GeneratePackageOnBuild=true /p:PackageOutputPath="$(build.artifactStagingDirectory)"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    maximumCpuCount: true #enable parallel build
+    logFileVerbosity: minimal
+
+- task: DotNetCoreCLI@2
+  displayName: test
+  inputs:
+    command: test
+    projects: 'test/**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage" -p:ParallelizeTestCollections=true'
+
+- task: DotNetCoreCLI@2
+  displayName: 'push to project feed'
+  inputs:
+    command: 'push'
+    searchPatternPush: '$(Build.ArtifactStagingDirectory)/**/*.*pkg'
+    includesymbols: true
+    includesource: true
+    publishVstsFeed: '$(publishVstsFeed)'
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push nuget.org feed'
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/stable'))
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: nuget.org
