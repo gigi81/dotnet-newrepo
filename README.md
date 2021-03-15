@@ -110,5 +110,5 @@ Project Link: [https://github.com/gigi81/dotnet-newrepo](https://github.com/gigi
 [issues-url]: https://github.com/gigi81/repo/issues
 [license-shield]: https://img.shields.io/github/license/gigi81/dotnet-newrepo
 [license-url]: https://github.com/gigi81/repo/blob/master/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-blue
 [linkedin-url]: https://linkedin.com/in/luigigrilli
