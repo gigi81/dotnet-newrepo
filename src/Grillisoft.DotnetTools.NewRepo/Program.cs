@@ -20,7 +20,12 @@ namespace Grillisoft.DotnetTools.NewRepo
                 .UseConsoleLifetime() //ctrl+C support
                 .ConfigureLogging(logging =>
                 {
-                    logging.AddConsole();
+                    logging.AddSimpleConsole(options =>
+                    {
+                        options.IncludeScopes = false;
+                        options.SingleLine = true;
+                        options.TimestampFormat = "hh:mm:ss ";
+                    });
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

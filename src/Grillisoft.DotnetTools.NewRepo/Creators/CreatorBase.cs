@@ -56,6 +56,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
 
         protected async Task Run(string name, string args, DirectoryInfo workingDirectory, CancellationToken cancellationToken)
         {
+            _logger.LogInformation("Running command {0} {1}", name, args);
             await Command.RunAsync(name, args, workingDirectory.FullName, false, null, null, null, null, false, cancellationToken);
         }
 
