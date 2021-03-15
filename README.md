@@ -11,13 +11,9 @@
   <h3 align="center">dotnet newrepo</h3>
 
   <p align="center">
-    This is a tool to create a git repo for a dotnet project including folders, solution, test project, readme, license, azure devops build template and more
-    <br />
-    <a href="https://github.com/gigi81/dotnet-newrepo"><strong>Explore the docs »</strong></a>
+    This is a dotnet tool to create a git repo for a dotnet project including folders, solution, test project, readme, license, azure devops build template and more...
     <br />
     <br />
-    <a href="https://github.com/gigi81/dotnet-newrepo">View Demo</a>
-    ·
     <a href="https://github.com/gigi81/dotnet-newrepo/issues">Report Bug</a>
     ·
     <a href="https://github.com/gigi81/dotnet-newrepo/issues">Request Feature</a>
@@ -30,9 +26,6 @@
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
     <li>
       <a href="#getting-started">Getting Started</a>
@@ -55,6 +48,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+### Prerequisites
+
+You will need to have the "dotnet" and "git" commands in the path
 
 ### Installation
 
@@ -62,10 +58,7 @@
 dotnet tool install dotnet-newrepo -g
 ```
 
-<!-- USAGE EXAMPLES -->
 ## Usage
-
-You will need to have the "dotnet" and "git" commands in the path
 
 ```bash
 mkdir Organization.Project
@@ -96,6 +89,7 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 ## Contact
 
 Luigi Grilli - [@gigifun](https://twitter.com/gigifun)
+
 Project Link: [https://github.com/gigi81/dotnet-newrepo](https://github.com/gigi81/dotnet-newrepo)
 
 <!-- MARKDOWN LINKS & IMAGES -->
