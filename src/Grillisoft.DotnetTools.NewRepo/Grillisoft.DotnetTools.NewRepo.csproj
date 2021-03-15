@@ -5,6 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <PackageId>dotnet-newrepo</PackageId>
     <PackAsTool>true</PackAsTool>
+    <ToolCommandName>newrepo</ToolCommandName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
