@@ -1,3 +1,4 @@
+[![Build Status](https://luigigrilli.visualstudio.com/dotnet-newrepo/_apis/build/status/gigi81.dotnet-newrepo?branchName=master)](https://luigigrilli.visualstudio.com/dotnet-newrepo/_build/latest?definitionId=15&branchName=master)
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -64,8 +65,18 @@ dotnet tool install dotnet-newrepo -g
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+You will need to have the "dotnet" and "git" commands in the path
+
 ```bash
+mkdir Organization.Project
+cd Organization.Project
 dotnet newrepo
+```
+
+or more simply
+
+```bash
+dotnet newrepo Organization.Project
 ```
 
 ## Contributing
