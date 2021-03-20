@@ -1,13 +1,19 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
     public sealed class NewRepoSettings
     {
+        public const string InitFilename = "init.json";
+
         private readonly DirectoryInfo _root;
         private string _name;
         private string _copyrightOwner;
@@ -79,6 +85,27 @@ namespace Grillisoft.DotnetTools.NewRepo
             return string.IsNullOrEmpty(value) ? defaultValue : value;
         }
 
+        public async Task LoadSettings(ILogger logger, CancellationToken token)
+        {
+            var init = this.Root.File(InitFilename);
+            if (!init.Exists)
+            {
+                logger.LogWarning($"Settings file {InitFilename} not found. Will use default settings");
+                return;
+            }
+
+            try
+            {
+                logger.LogInformation("Loading settings from {0}", init.FullName);
+                using (var stream = init.OpenRead())
+                    this.Load(await JsonSerializer.DeserializeAsync<NewRepoSettings>(stream, null, token));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to load settings from {init.FullName}: {ex.Message}", ex);
+            }
+        }
+
         public void Load(NewRepoSettings settings)
         {
             if (settings == null)
@@ -86,7 +113,8 @@ namespace Grillisoft.DotnetTools.NewRepo
 
             var fields = typeof(NewRepoSettings)
                 .GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
-                .Where(f => !f.Name.Equals(nameof(_root)));
+                .Where(f => !f.IsInitOnly)
+                .ToArray();
 
             foreach (var field in fields)
                 field.SetValue(this, field.GetValue(settings));
