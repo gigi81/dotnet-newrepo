@@ -45,7 +45,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
             foreach(var line in lines)
             {
-                if (line.Contains("Global"))
+                if (line.Equals("Global"))
                 {
                     ret.AddRange(new[] {
                         "Project(\"{2150E333-8FDC-42A3-9474-1A3956D46DE8}\") = \"Solution Items\", \"Solution Items\", \"{" + Guid.NewGuid() + "}\"",
