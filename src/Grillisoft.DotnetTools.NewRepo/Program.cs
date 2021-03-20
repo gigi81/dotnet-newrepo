@@ -3,6 +3,7 @@ using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +15,15 @@ namespace Grillisoft.DotnetTools.NewRepo
 
         static async Task Main(string[] args)
         {
-            await CreateHostBuilder(args).RunConsoleAsync();
+            try
+            {
+                await CreateHostBuilder(args).RunConsoleAsync();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
@@ -23,12 +32,8 @@ namespace Grillisoft.DotnetTools.NewRepo
                 .UseConsoleLifetime() //ctrl+C support
                 .ConfigureLogging(logging =>
                 {
-                    logging.AddSimpleConsole(options =>
-                    {
-                        options.IncludeScopes = false;
-                        options.SingleLine = true;
-                        options.TimestampFormat = "hh:mm:ss ";
-                    });
+                    logging.ClearProviders()
+                           .AddLog4Net();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

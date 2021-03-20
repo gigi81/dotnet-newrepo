@@ -10,11 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="log4net.config" />
     <None Remove="Templates\.issuetracker" />
     <None Remove="Templates\azure-pipelines.yml" />
     <None Remove="Templates\RootDirectory.Build.props" />
     <None Remove="Templates\SrcDirectory.Build.props" />
     <None Remove="Templates\TestsDirectory.Build.props" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -26,10 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="log4net" Version="2.0.12" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.0" />
     <PackageReference Include="SimpleExec" Version="6.4.0" />
   </ItemGroup>
 

@@ -82,6 +82,19 @@ namespace Grillisoft.DotnetTools.NewRepo
             set => _githubRepoName = value;
         }
 
+        [JsonIgnore]
+        public string GithubUrl
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.GithubUsername) ||
+                    string.IsNullOrWhiteSpace(this.GithubRepoName))
+                    return null;
+
+                return $"https://github.com/{GithubUsername}/{GithubRepoName}.git";
+            }
+        }
+
         public string TwitterUsername { get; set; }
 
         private static string GetOrDefault(string value, string defaultValue)
