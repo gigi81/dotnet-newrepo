@@ -24,22 +24,14 @@
 <details open="open">
   <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
   <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a></li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -47,12 +39,17 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+There is some sort of an [unofficial standard structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814) when it comes to dotnet repositories.
+For example having a 'src' and 'tests' folder, a solution on the root, etc.
+As I was finding myself recreating this sctructure multiple times, I decided to create this tool which helps to create
+as much as possible of an entire repository structure, so that you can focus on addding your value and code instead of
+worrying about things like how to build the project or how to share settings between projects with DirectoryBuildProps.
 
-### Prerequisites
+## Prerequisites
 
 You will need to have the "dotnet" and "git" commands in the path
 
-### Installation
+## Installation
 
 ```bash
 dotnet tool install dotnet-newrepo -g
@@ -61,15 +58,13 @@ dotnet tool install dotnet-newrepo -g
 ## Usage
 
 ```bash
+#first create a directory host your repo
 mkdir Organization.Project
 cd Organization.Project
+#then create the init.json file (this file is used to specify a few settings like your github username
+dotnet newrepo init
+#customize the init.json file with your settings, then run
 dotnet newrepo
-```
-
-or more simply
-
-```bash
-dotnet newrepo Organization.Project
 ```
 
 ## Contributing
@@ -84,13 +79,11 @@ Contributions are what make the open source community such an amazing place to b
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.md` for more information.
+Distributed under the MIT License. See <a href="LICENSE.md">`LICENSE.md`</a> for more information.
 
 ## Contact
 
 Luigi Grilli - [@gigifun](https://twitter.com/gigifun)
-
-Project Link: [https://github.com/gigi81/dotnet-newrepo](https://github.com/gigi81/dotnet-newrepo)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->

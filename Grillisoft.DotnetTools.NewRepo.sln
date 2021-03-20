@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9F0144B9-3B21-49A6-84FC-64222E764AB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grillisoft.DotnetTools.NewRepo", "src\Grillisoft.DotnetTools.NewRepo\Grillisoft.DotnetTools.NewRepo.csproj", "{236AA2F1-0689-43F9-861D-EE02E3CE6EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grillisoft.DotnetTools.NewRepo", "src\Grillisoft.DotnetTools.NewRepo\Grillisoft.DotnetTools.NewRepo.csproj", "{236AA2F1-0689-43F9-861D-EE02E3CE6EC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B0D35F8A-5404-4EED-AEB7-D2D634BE0918}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{236AA2F1-0689-43F9-861D-EE02E3CE6EC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,7 +37,13 @@ Global
 		{236AA2F1-0689-43F9-861D-EE02E3CE6EC1}.Release|x86.ActiveCfg = Release|Any CPU
 		{236AA2F1-0689-43F9-861D-EE02E3CE6EC1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{236AA2F1-0689-43F9-861D-EE02E3CE6EC1} = {9F0144B9-3B21-49A6-84FC-64222E764AB1}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {00D39DD9-990D-428C-B795-725C1A78CF7C}
 	EndGlobalSection
 EndGlobal
