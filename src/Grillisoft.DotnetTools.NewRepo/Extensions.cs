@@ -72,19 +72,19 @@ namespace Grillisoft.DotnetTools.NewRepo
             return lines.ToArray();
         }
 
-        public static Task WriteAllLinesAsync(this FileInfo file, string[] lines, CancellationToken cancellationToken = default)
+        public static Task WriteAllLinesAsync(this FileInfo file, IEnumerable<string> lines, CancellationToken cancellationToken = default)
         {
             return WriteAllLinesAsync(file, lines, UTF8WithoutBom, cancellationToken);
         }
 
-        public static async Task WriteAllLinesAsync(this FileInfo file, string[] lines, Encoding encoding, CancellationToken cancellationToken = default)
+        public static async Task WriteAllLinesAsync(this FileInfo file, IEnumerable<string> lines, Encoding encoding, CancellationToken cancellationToken = default)
         {
             using (var stream = new FileStream(file.FullName, file.Exists ? FileMode.Truncate : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, DefaultBufferSize, DefaultOptions))
             using (var writer = new StreamWriter(stream, encoding))
                 await writer.WriteAsync(lines.JoinLines(), cancellationToken);
         }
 
-        public static StringBuilder JoinLines(this string[] lines)
+        public static StringBuilder JoinLines(this IEnumerable<string> lines)
         {
             var builder = new StringBuilder();
             foreach (var line in lines)
