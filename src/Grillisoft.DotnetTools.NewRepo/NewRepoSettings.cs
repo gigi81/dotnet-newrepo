@@ -33,6 +33,9 @@ namespace Grillisoft.DotnetTools.NewRepo
         [JsonIgnore]
         public DirectoryInfo Root => _root;
 
+        [JsonIgnore]
+        public FileInfo InitFile => _root.File(InitFilename);
+
         public string Name
         {
             get => _name ?? _root.Name;

@@ -29,9 +29,10 @@ namespace Grillisoft.DotnetTools.NewRepo
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var init = _options.InitFile;
+
             try
             {
-                var init = _options.Root.File("init.json");
                 var jsonOptions = new JsonSerializerOptions
                 {
                     WriteIndented = true
@@ -45,7 +46,7 @@ namespace Grillisoft.DotnetTools.NewRepo
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating dotnet repo:" + ex.Message);
+                _logger.LogError(ex, $"Error while creating file {init.FullName}: " + ex.Message);
             }
             finally
             {
