@@ -51,20 +51,20 @@ You will need to have the "dotnet" and "git" commands in the path
 
 ## Installation
 
-```bash
+```Powershell
 dotnet tool install dotnet-newrepo --global
 ```
 
 ## Usage
 
-```bash
+```Powershell
 #first create a directory host your repo
 mkdir Organization.Project
 cd Organization.Project
-#then create the init.json file (this file is used to specify a few settings like your github username
+#then create the init.json file (this file is used to specify a few settings like your github username)
 newrepo init
 #customize the init.json file with your settings
-notepad init.jsonn
+notepad init.json
 #then finally create the repo
 newrepo
 ```
