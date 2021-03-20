@@ -44,9 +44,10 @@ steps:
     includesource: true
     publishVstsFeed: '$(publishVstsFeed)'
 
+# task to publish to nuget.org feed (only for release branches)
 - task: NuGetCommand@2
   displayName: 'NuGet push nuget.org feed'
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/stable'))
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranchName'], 'release/'))
   inputs:
     command: push
     nuGetFeedType: external
