@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo
@@ -7,6 +10,19 @@ namespace Grillisoft.DotnetTools.NewRepo
     public static class Extensions
     {
         public static readonly Encoding UTF8WithoutBom = new UTF8Encoding(false);
+
+        /// <summary>
+        /// This is the same default buffer size as
+        /// <see cref="StreamReader"/> and <see cref="FileStream"/>.
+        /// </summary>
+        private const int DefaultBufferSize = 4096;
+
+        /// <summary>
+        /// Indicates that
+        /// 1. The file is to be used for asynchronous reading.
+        /// 2. The file is to be accessed sequentially from beginning to end.
+        /// </summary>
+        private const FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
         public static DirectoryInfo SubDirectory(this DirectoryInfo root, string name)
         {
@@ -30,6 +46,52 @@ namespace Grillisoft.DotnetTools.NewRepo
             {
                 await writer.WriteAsync(content);
             }
+        }
+
+        public static Task<string[]> ReadAllLinesAsync(this FileInfo file, CancellationToken cancellationToken = default)
+        {
+            return ReadAllLinesAsync(file, Encoding.UTF8, cancellationToken);
+        }
+
+        public static async Task<string[]> ReadAllLinesAsync(this FileInfo file, Encoding encoding, CancellationToken cancellationToken = default)
+        {
+            var lines = new List<string>();
+
+            // Open the FileStream with the same FileMode, FileAccess
+            // and FileShare as a call to File.OpenText would've done.
+            using (var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions))
+            using (var reader = new StreamReader(stream, encoding))
+            {
+                string line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    lines.Add(line);
+                }
+            }
+
+            return lines.ToArray();
+        }
+
+        public static Task WriteAllLinesAsync(this FileInfo file, string[] lines, CancellationToken cancellationToken = default)
+        {
+            return WriteAllLinesAsync(file, lines, UTF8WithoutBom, cancellationToken);
+        }
+
+        public static async Task WriteAllLinesAsync(this FileInfo file, string[] lines, Encoding encoding, CancellationToken cancellationToken = default)
+        {
+            using (var stream = new FileStream(file.FullName, file.Exists ? FileMode.Truncate : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, DefaultBufferSize, DefaultOptions))
+            using (var writer = new StreamWriter(stream, encoding))
+                await writer.WriteAsync(lines.JoinLines(), cancellationToken);
+        }
+
+        public static StringBuilder JoinLines(this string[] lines)
+        {
+            var builder = new StringBuilder();
+            foreach (var line in lines)
+                builder.AppendLine(line);
+
+            return builder;
         }
     }
 }

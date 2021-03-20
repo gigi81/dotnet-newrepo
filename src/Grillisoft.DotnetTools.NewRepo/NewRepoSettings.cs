@@ -79,7 +79,8 @@ namespace Grillisoft.DotnetTools.NewRepo
         public string GithubRepoName
         {
             get => GetOrDefault(_githubRepoName, this.Name);
-            set => _githubRepoName = value; }
+            set => _githubRepoName = value;
+        }
 
         public string TwitterUsername { get; set; }
 
