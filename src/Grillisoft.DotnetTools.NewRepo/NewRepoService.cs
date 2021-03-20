@@ -4,10 +4,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.Json;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
@@ -36,35 +34,38 @@ namespace Grillisoft.DotnetTools.NewRepo
             {
                 var watch = Stopwatch.StartNew();
                 _logger.LogInformation("Creating dotnet repo in {0}", _options.Root.FullName);
-
-                var batch = new List<Task>();
-
-                foreach (var creator in _creators)
-                {
-                    if (creator.IsParallel)
-                    {
-                        batch.Add(creator.Create(stoppingToken));
-                        continue;
-                    }
-
-                    await Task.WhenAll(batch);
-                    await creator.Create(stoppingToken);
-                    batch.Clear();
-                }
-
-                await Task.WhenAll(batch);
-
+                await RunCreators(stoppingToken);
                 _logger.LogInformation("Repository {0} created in {1}", _options.Root.FullName, watch.Elapsed);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while creating dotnet repo:" + ex.Message);
+                _logger.LogError(ex, "Error while creating dotnet repo: " + ex.Message);
             }
             finally
             {
                 // Stop the application once the work is done
                 _appLifetime.StopApplication();
             }
+        }
+
+        private async Task RunCreators(CancellationToken stoppingToken)
+        {
+            var batch = new List<Task>();
+
+            foreach (var creator in _creators)
+            {
+                if (creator.IsParallel)
+                {
+                    batch.Add(creator.Create(stoppingToken));
+                    continue;
+                }
+
+                await Task.WhenAll(batch);
+                await creator.Create(stoppingToken);
+                batch.Clear();
+            }
+
+            await Task.WhenAll(batch);
         }
     }
 }
