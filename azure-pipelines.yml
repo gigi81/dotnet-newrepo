@@ -47,7 +47,7 @@ steps:
 # task to publish to nuget.org feed (only for release branches)
 - task: NuGetCommand@2
   displayName: 'NuGet push nuget.org feed'
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranchName'], 'release/'))
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'))
   inputs:
     command: push
     nuGetFeedType: external
