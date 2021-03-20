@@ -53,13 +53,14 @@ namespace Grillisoft.DotnetTools.NewRepo
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()
                             .AddSingleton<ICreator, GitIgnoreCreator>()
+                            .AddSingleton<ICreator, GitAttributesCreator>()
                             .AddSingleton<ICreator, DotnetCreator>()
                             .AddSingleton<ICreator, DirectoryBuildPropsCreator>()
                             .AddSingleton<ICreator, LicenseCreator>()
                             .AddSingleton<ICreator, ReadmeCreator>()
                             .AddSingleton<ICreator, AzurePipelinesCreator>()
                             .AddSingleton<ICreator, IssueTrackerCreator>()
-                            //this MUST be the LAST one as it creates the repo and does initial commit
+                            //this MUST be the LAST one as it initialize the git repo and does initial commit
                             .AddSingleton<ICreator, GitCreator>();
                 });
         }

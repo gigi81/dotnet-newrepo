@@ -51,13 +51,13 @@ You will need to have the "dotnet" and "git" commands in the path
 
 ## Installation
 
-```Powershell
+```PowerShell
 dotnet tool install dotnet-newrepo --global
 ```
 
 ## Usage
 
-```Powershell
+```PowerShell
 #first create a directory host your repo
 mkdir Organization.Project
 cd Organization.Project

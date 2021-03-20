@@ -11,25 +11,14 @@
 
   <ItemGroup>
     <None Remove="log4net.config" />
-    <None Remove="Templates\.issuetracker" />
-    <None Remove="Templates\azure-pipelines.yml" />
-    <None Remove="Templates\RootDirectory.Build.props" />
-    <None Remove="Templates\SrcDirectory.Build.props" />
-    <None Remove="Templates\TestsDirectory.Build.props" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Templates\.issuetracker" />
-    <EmbeddedResource Include="Templates\azure-pipelines.yml" />
-    <EmbeddedResource Include="Templates\RootDirectory.Build.props" />
-    <EmbeddedResource Include="Templates\SrcDirectory.Build.props" />
-    <EmbeddedResource Include="Templates\TestsDirectory.Build.props" />
+    <None Remove="Templates\*" />
+    <EmbeddedResource Include="Templates\*" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,7 +27,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="5.0.0" />
-    <PackageReference Include="SimpleExec" Version="6.4.0" />
+    <PackageReference Include="SimpleExec" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
