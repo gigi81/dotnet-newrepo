@@ -11,21 +11,18 @@ using System.Text.Json;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
-    internal sealed class NewRepoService : BackgroundService
+    internal sealed class InitService : BackgroundService
     {
         private readonly NewRepoSettings _options;
-        private readonly IEnumerable<ICreator> _creators;
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
 
-        public NewRepoService(
+        public InitService(
             NewRepoSettings options,
-            IEnumerable<ICreator> creators,
             ILogger<NewRepoService> logger,
             IHostApplicationLifetime appLifetime)
         {
             _options = options;
-            _creators = creators;
             _logger = logger;
             _appLifetime = appLifetime;
         }
@@ -34,27 +31,17 @@ namespace Grillisoft.DotnetTools.NewRepo
         {
             try
             {
-                var watch = Stopwatch.StartNew();
-                _logger.LogInformation("Creating dotnet repo in {0}", _options.Root.FullName);
-
-                var batch = new List<Task>();
-
-                foreach (var creator in _creators)
+                var init = _options.Root.File("init.json");
+                var jsonOptions = new JsonSerializerOptions
                 {
-                    if (creator.IsParallel)
-                    {
-                        batch.Add(creator.Create(stoppingToken));
-                        continue;
-                    }
+                    WriteIndented = true
+                };
 
-                    await Task.WhenAll(batch);
-                    await creator.Create(stoppingToken);
-                    batch.Clear();
-                }
+                using (var stream = init.OpenWrite())
+                    await JsonSerializer.SerializeAsync(stream, _options, jsonOptions, stoppingToken);
 
-                await Task.WhenAll(batch);
-
-                _logger.LogInformation("Repository {0} created in {1}", _options.Root.FullName, watch.Elapsed);
+                _logger.LogInformation($"Created file {init.FullName}");
+                _logger.LogInformation($"Customize your settings in the file then, on the same folder, run: dotnet newrepo");
             }
             catch (Exception ex)
             {

@@ -3,12 +3,15 @@ using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
     internal sealed class Program
     {
+        const string InitCommand = "init";
+
         static async Task Main(string[] args)
         {
             await CreateHostBuilder(args).RunConsoleAsync();
@@ -29,8 +32,14 @@ namespace Grillisoft.DotnetTools.NewRepo
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<NewRepoService>()
-                            .AddHttpClient()
+                    if (args.Contains(InitCommand))
+                        services.AddHostedService<InitService>();
+                    else
+                        services.AddHostedService<NewRepoService>();
+
+                    args = args.Except(new[] { InitCommand }).ToArray();
+
+                    services.AddHttpClient()
                             .AddSingleton(new NewRepoSettings(args))
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()

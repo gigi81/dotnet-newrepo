@@ -1,21 +1,30 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
     public sealed class NewRepoSettings
     {
-        private DirectoryInfo _root;
+        private readonly DirectoryInfo _root;
         private string _name;
         private string _copyrightOwner;
         private string _copyrightYear;
         private string _githubRepoName;
+
+        public NewRepoSettings()
+        {
+            _root = new DirectoryInfo(".");
+        }
 
         public NewRepoSettings(string[] args)
         {
             _root = new DirectoryInfo(args.Length > 0 ? args[0] : ".");
         }
 
+        [JsonIgnore]
         public DirectoryInfo Root => _root;
 
         public string Name
@@ -68,6 +77,19 @@ namespace Grillisoft.DotnetTools.NewRepo
         private static string GetOrDefault(string value, string defaultValue)
         {
             return string.IsNullOrEmpty(value) ? defaultValue : value;
+        }
+
+        public void Load(NewRepoSettings settings)
+        {
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings));
+
+            var fields = typeof(NewRepoSettings)
+                .GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
+                .Where(f => !f.Name.Equals(nameof(_root)));
+
+            foreach (var field in fields)
+                field.SetValue(this, field.GetValue(settings));
         }
     }
 }

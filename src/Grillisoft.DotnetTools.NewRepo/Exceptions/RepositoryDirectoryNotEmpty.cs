@@ -6,8 +6,8 @@ namespace Grillisoft.DotnetTools.NewRepo
     [Serializable]
     internal class RepositoryDirectoryNotEmpty : Exception
     {
-        public RepositoryDirectoryNotEmpty(string folder)
-            : base($"{folder} is not empty. Cannot create repository")
+        public RepositoryDirectoryNotEmpty(string directory)
+            : base($"Cannot create repository. {directory} is not empty. There are other files in the directory other than init.json")
         {
         }
 
