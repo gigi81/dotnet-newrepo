@@ -1,5 +1,5 @@
 [![Build Status](https://luigigrilli.visualstudio.com/dotnet-newrepo/_apis/build/status/gigi81.dotnet-newrepo?branchName=master)](https://luigigrilli.visualstudio.com/dotnet-newrepo/_build/latest?definitionId=15&branchName=master)
-[![Contributors][contributors-shield]][contributors-url]
+[![Nuget][nuget-shield]][nuget-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -52,7 +52,7 @@ You will need to have the "dotnet" and "git" commands in the path
 ## Installation
 
 ```bash
-dotnet tool install dotnet-newrepo -g
+dotnet tool install dotnet-newrepo --global
 ```
 
 ## Usage
@@ -62,9 +62,11 @@ dotnet tool install dotnet-newrepo -g
 mkdir Organization.Project
 cd Organization.Project
 #then create the init.json file (this file is used to specify a few settings like your github username
-dotnet newrepo init
-#customize the init.json file with your settings, then run
-dotnet newrepo
+newrepo init
+#customize the init.json file with your settings
+notepad init.jsonn
+#then finally create the repo
+newrepo
 ```
 
 ## Contributing
@@ -99,3 +101,5 @@ Luigi Grilli - [@gigifun](https://twitter.com/gigifun)
 [license-url]: https://github.com/gigi81/repo/blob/master/LICENSE.md
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-blue
 [linkedin-url]: https://linkedin.com/in/luigigrilli
+[nuget-shield]:https://img.shields.io/nuget/v/dotnet-newrepo
+[nuget-url]:https://www.nuget.org/packages/dotnet-newrepo/
