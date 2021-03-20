@@ -29,7 +29,11 @@ namespace Grillisoft.DotnetTools.NewRepo
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             return Host.CreateDefaultBuilder(args)
-                .UseConsoleLifetime() //ctrl+C support
+                //ctrl+C support
+                .UseConsoleLifetime(options =>
+                {
+                    options.SuppressStatusMessages = true;
+                })
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders()
