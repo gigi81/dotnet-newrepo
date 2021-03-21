@@ -30,4 +30,8 @@
     <PackageReference Include="SimpleExec" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Grillisoft.DotnetTools.NewRepo.Abstractions\Grillisoft.DotnetTools.NewRepo.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

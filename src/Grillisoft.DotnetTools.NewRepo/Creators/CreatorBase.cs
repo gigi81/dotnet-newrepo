@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using Grillisoft.DotnetTools.NewRepo.Abstractions;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators
 {

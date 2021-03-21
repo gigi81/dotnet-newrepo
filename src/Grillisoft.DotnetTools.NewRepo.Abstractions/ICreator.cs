@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Grillisoft.DotnetTools.NewRepo.Creators
+namespace Grillisoft.DotnetTools.NewRepo.Abstractions
 {
     public interface ICreator
     {

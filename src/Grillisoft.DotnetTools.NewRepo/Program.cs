@@ -1,4 +1,4 @@
-﻿using Grillisoft.DotnetTools.NewRepo.Creators;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
