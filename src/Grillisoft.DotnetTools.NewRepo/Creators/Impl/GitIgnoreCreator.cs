@@ -13,15 +13,15 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private readonly IHttpClientFactory _httpClientFactory;
 
         public GitIgnoreCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             IHttpClientFactory httpClientFactory,
             ILogger<GitIgnoreCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public string Url => "https://www.toptal.com/developers/gitignore/api/" + string.Join(',', _options.GitIgnoreTags);
+        public string Url => "https://www.toptal.com/developers/gitignore/api/" + string.Join(',', _settings.GitIgnoreTags);
 
         public override async Task Create(CancellationToken cancellationToken)
         {

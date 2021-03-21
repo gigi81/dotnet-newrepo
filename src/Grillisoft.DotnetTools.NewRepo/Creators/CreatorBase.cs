@@ -14,17 +14,17 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
         private readonly DirectoryInfo _root;
         private readonly DirectoryInfo _src;
         private readonly DirectoryInfo _tests;
-        protected readonly NewRepoSettings _options;
+        protected readonly NewRepoSettings _settings;
         protected readonly ILogger _logger;
 
-        public CreatorBase(NewRepoSettings options, ILogger logger)
+        public CreatorBase(NewRepoSettings settings, ILogger logger)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings));
 
-            _options = options;
+            _settings = settings;
             _logger = logger;
-            _root = _options.Root;
+            _root = _settings.Root;
             _src = _root.SubDirectory("src");
             _tests = _root.SubDirectory("tests");
         }

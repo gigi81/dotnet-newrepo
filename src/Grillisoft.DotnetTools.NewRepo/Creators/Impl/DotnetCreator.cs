@@ -12,21 +12,21 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private const string FolderGuid = "2150E333-8FDC-42A3-9474-1A3956D46DE8";
 
         public DotnetCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<DotnetCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 
         public async override Task Create(CancellationToken cancellationToken)
         {
-            var src = this.Src.CreateSubdirectory(_options.Name);
-            var tests = this.Tests.CreateSubdirectory(_options.Name + ".Tests");
+            var src = this.Src.CreateSubdirectory(_settings.Name);
+            var tests = this.Tests.CreateSubdirectory(_settings.Name + ".Tests");
 
             await Task.WhenAll(
                 Run("dotnet", "new sln", cancellationToken),
                 Run("dotnet", "new classlib", src, cancellationToken),
-                Run("dotnet", "new " + _options.TestFramework, tests, cancellationToken)
+                Run("dotnet", "new " + _settings.TestFramework, tests, cancellationToken)
             );
 
             var projects = this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories)

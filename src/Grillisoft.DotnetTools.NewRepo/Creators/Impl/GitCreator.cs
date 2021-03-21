@@ -7,9 +7,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     public class GitCreator : CreatorBase
     {
         public GitCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<GitCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 
@@ -21,13 +21,13 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             await Run("git", "add -A", cancellationToken);
             await Run("git", "commit -m \"Initial commit\"", cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(_options.GithubUrl))
+            if (string.IsNullOrWhiteSpace(_settings.GithubUrl))
             {
                 _logger.LogInformation($"Cannot set git remote. Not github settings specified");
                 return;
             }
 
-            await Run("git", $"remote add origin {_options.GithubUrl}", cancellationToken);
+            await Run("git", $"remote add origin {_settings.GithubUrl}", cancellationToken);
         }
     }
 }

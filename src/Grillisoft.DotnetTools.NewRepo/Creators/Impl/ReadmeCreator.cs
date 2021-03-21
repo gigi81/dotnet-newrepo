@@ -13,10 +13,10 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private readonly IHttpClientFactory _httpClientFactory;
 
         public ReadmeCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<ReadmeCreator> logger,
             IHttpClientFactory httpClientFactory)
-            : base(options, logger)
+            : base(settings, logger)
         {
             _httpClientFactory = httpClientFactory;
         }
@@ -32,11 +32,11 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 response.EnsureSuccessStatusCode();
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                responseBody = responseBody.Replace("github_username", _options.GithubUsername);
-                responseBody = responseBody.Replace("repo_name", _options.GithubRepoName);
-                responseBody = responseBody.Replace("twitter_handle", _options.TwitterUsername);
-                responseBody = responseBody.Replace("project_title", _options.Name);
-                responseBody = responseBody.Replace("project_description", _options.Product);
+                responseBody = responseBody.Replace("github_username", _settings.GithubUsername);
+                responseBody = responseBody.Replace("repo_name", _settings.GithubRepoName);
+                responseBody = responseBody.Replace("twitter_handle", _settings.TwitterUsername);
+                responseBody = responseBody.Replace("project_title", _settings.Name);
+                responseBody = responseBody.Replace("project_description", _settings.Product);
 
                 var index = responseBody.IndexOf("-->");
                 if (index > 0)

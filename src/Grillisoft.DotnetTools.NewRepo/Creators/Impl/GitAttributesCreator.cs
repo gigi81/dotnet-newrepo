@@ -9,9 +9,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public const string Name = ".gitattributes";
 
         public GitAttributesCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<GitAttributesCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 

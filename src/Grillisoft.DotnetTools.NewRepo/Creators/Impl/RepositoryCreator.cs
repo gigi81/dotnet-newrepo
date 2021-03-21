@@ -8,9 +8,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     public class RepositoryCreator : CreatorBase
     {
         public RepositoryCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<RepositoryCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 
@@ -21,7 +21,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             if (!this.Root.Exists)
                 this.Root.Create();
 
-            await _options.LoadSettings(_logger, token);
+            await _settings.LoadSettings(_logger, token);
 
             if (this.Root.GetFiles().Where(f => !f.Name.Equals(NewRepoSettings.InitFilename)).Count() > 0 ||
                 this.Root.GetDirectories().Length > 0)

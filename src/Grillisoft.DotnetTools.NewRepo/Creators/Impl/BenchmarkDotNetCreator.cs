@@ -9,15 +9,15 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     public class BenchmarkDotNetCreator : CreatorBase
     {
         public BenchmarkDotNetCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<BenchmarkDotNetCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            if(!_options.Benchmark)
+            if(!_settings.Benchmark)
             {
                 _logger.LogInformation("Skipping benchmark project creation");
                 return;
@@ -27,7 +27,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             if(!benchmarkDir.Exists)
                 benchmarkDir.Create();
 
-            var projectDir = benchmarkDir.SubDirectory(_options.Name + ".Benchmark");
+            var projectDir = benchmarkDir.SubDirectory(_settings.Name + ".Benchmark");
             if (!projectDir.Exists)
                 projectDir.Create();
 

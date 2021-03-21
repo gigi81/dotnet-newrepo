@@ -11,9 +11,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public const string Name = "Directory.Build.props";
 
         public DirectoryBuildPropsCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<DirectoryBuildPropsCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 

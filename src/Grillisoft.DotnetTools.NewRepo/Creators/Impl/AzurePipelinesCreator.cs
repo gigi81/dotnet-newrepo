@@ -9,15 +9,15 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public const string Name = "azure-pipelines.yml";
 
         public AzurePipelinesCreator(
-            NewRepoSettings options,
+            NewRepoSettings settings,
             ILogger<AzurePipelinesCreator> logger)
-            : base(options, logger)
+            : base(settings, logger)
         {
         }
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            if (!_options.AzureDevops)
+            if (!_settings.AzureDevops)
             {
                 _logger.LogInformation("Skipping AzureDevops yaml creation");
                 return;
