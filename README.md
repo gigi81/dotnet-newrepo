@@ -51,8 +51,16 @@ You will need to have the "dotnet" and "git" commands in the path
 
 ## Installation
 
+To first install the tool
+
 ```PowerShell
 dotnet tool install dotnet-newrepo --global
+```
+
+To install tool's updates
+
+```PowerShell
+dotnet tool update dotnet-newrepo --global
 ```
 
 ## Usage
