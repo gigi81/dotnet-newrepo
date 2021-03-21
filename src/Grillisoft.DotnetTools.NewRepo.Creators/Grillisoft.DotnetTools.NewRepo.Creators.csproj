@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\*" />
+    <EmbeddedResource Include="Templates\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Grillisoft.DotnetTools.NewRepo.Abstractions\Grillisoft.DotnetTools.NewRepo.Abstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="SimpleExec" Version="7.0.0" />
+  </ItemGroup>
+</Project>

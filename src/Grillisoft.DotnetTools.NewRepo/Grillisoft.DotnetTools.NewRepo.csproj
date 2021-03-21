@@ -17,11 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Templates\*" />
-    <EmbeddedResource Include="Templates\*" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.12" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
@@ -32,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Grillisoft.DotnetTools.NewRepo.Abstractions\Grillisoft.DotnetTools.NewRepo.Abstractions.csproj" />
+    <ProjectReference Include="..\Grillisoft.DotnetTools.NewRepo.Creators\Grillisoft.DotnetTools.NewRepo.Creators.csproj" />
   </ItemGroup>
 
 </Project>

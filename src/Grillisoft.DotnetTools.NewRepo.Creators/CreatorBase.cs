@@ -63,9 +63,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
 
         protected async Task<string> GetTemplateContent(string resourceName)
         {
-            var name = typeof(Program).Assembly.GetManifestResourceNames().First(r => r.EndsWith(resourceName));
+            var name = typeof(CreatorBase).Assembly.GetManifestResourceNames().First(r => r.EndsWith(resourceName));
 
-            using (var stream = typeof(Program).Assembly.GetManifestResourceStream(name))
+            using (var stream = typeof(CreatorBase).Assembly.GetManifestResourceStream(name))
             using (var reader = new StreamReader(stream))
             {
                 return await reader.ReadToEndAsync();
