@@ -49,7 +49,7 @@ namespace Grillisoft.DotnetTools.NewRepo
                     args = args.Except(new[] { InitCommand }).ToArray();
 
                     services.AddHttpClient()
-                            .AddSingleton(new NewRepoSettings(args))
+                            .AddSingleton<INewRepoSettings>(new NewRepoSettings(args))
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()
                             .AddSingleton<ICreator, GitIgnoreCreator>()

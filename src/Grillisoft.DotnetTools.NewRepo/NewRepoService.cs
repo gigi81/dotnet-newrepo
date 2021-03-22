@@ -11,18 +11,18 @@ namespace Grillisoft.DotnetTools.NewRepo
 {
     internal sealed class NewRepoService : BackgroundService
     {
-        private readonly NewRepoSettings _options;
+        private readonly INewRepoSettings _settings;
         private readonly IEnumerable<ICreator> _creators;
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
 
         public NewRepoService(
-            NewRepoSettings options,
+            INewRepoSettings settings,
             IEnumerable<ICreator> creators,
             ILogger<NewRepoService> logger,
             IHostApplicationLifetime appLifetime)
         {
-            _options = options;
+            _settings = settings;
             _creators = creators;
             _logger = logger;
             _appLifetime = appLifetime;
@@ -33,9 +33,9 @@ namespace Grillisoft.DotnetTools.NewRepo
             try
             {
                 var watch = Stopwatch.StartNew();
-                _logger.LogInformation("Creating dotnet repo in {0}", _options.Root.FullName);
+                _logger.LogInformation("Creating dotnet repo in {0}", _settings.Root.FullName);
                 await RunCreators(stoppingToken);
-                _logger.LogInformation("Repository {0} created in {1}", _options.Root.FullName, watch.Elapsed);
+                _logger.LogInformation("Repository {0} created in {1}", _settings.Root.FullName, watch.Elapsed);
             }
             catch (Exception ex)
             {

@@ -4,27 +4,7 @@ using System.Linq;
 
 namespace Grillisoft.DotnetTools.NewRepo.Abstractions
 {
-    public class ConfigurationKey
-    {
-        public ConfigurationKey()
-        {
-        }
-
-        public ConfigurationKey(string key, Type type, string help, object defaultValue)
-        {
-            this.Key = key;
-            this.Type = type;
-            this.Help = help;
-            this.DefaultValue = defaultValue;
-        }
-
-        public string Key { get; init; }
-        public Type Type { get; init; }
-        public string Help { get; init; }
-        public object DefaultValue { get; init; }
-    }
-
-    public class ConfigurationKeys
+    public class ConfigurationKeysManager
     {
         public static readonly ConfigurationKey Name = StringKey("name", "Project name (ex. YourOrganization.Project)");
         public static readonly ConfigurationKey Authors = StringKey("authors", "Authors of the project, this could be your name or your company Name");
@@ -39,11 +19,13 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
         public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
 
-        public static readonly IDictionary<string, ConfigurationKey> Keys = GetKeys();
+        public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new Lazy<IDictionary<string, ConfigurationKey>>(GetKeys);
+
+        public static IDictionary<string, ConfigurationKey> Keys => _keys.Value;
 
         private static Dictionary<string, ConfigurationKey> GetKeys()
         {
-            var keys = typeof(ConfigurationKeys).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+            var keys = typeof(ConfigurationKeysManager).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
                         .Where(f => f.FieldType == typeof(ConfigurationKey))
                         .Select(f => f.GetValue(null) as ConfigurationKey);
 
@@ -62,7 +44,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
                 Key = name,
                 Type = typeof(string),
                 Help = help,
-                DefaultValue = defaultValue
+                DefaultValue = defaultValue ?? String.Empty
             };
         }
 
@@ -76,9 +58,5 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
                 DefaultValue = defaultValue
             };
         }
-
-        //private static ConfigurationKey[] Keys = new[]
-        //{
-        //};
     }
 }

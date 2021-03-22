@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System.IO;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private readonly IHttpClientFactory _httpClientFactory;
 
         public GitIgnoreCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             IHttpClientFactory httpClientFactory,
             ILogger<GitIgnoreCreator> logger)
             : base(settings, logger)

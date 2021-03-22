@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private const string FolderGuid = "2150E333-8FDC-42A3-9474-1A3956D46DE8";
 
         public DotnetCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<DotnetCreator> logger)
             : base(settings, logger)
         {

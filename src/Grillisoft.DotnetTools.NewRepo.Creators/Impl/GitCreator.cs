@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     public class GitCreator : CreatorBase
     {
         public GitCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<GitCreator> logger)
             : base(settings, logger)
         {

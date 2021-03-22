@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -11,7 +12,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public const string Name = "Directory.Build.props";
 
         public DirectoryBuildPropsCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<DirectoryBuildPropsCreator> logger)
             : base(settings, logger)
         {

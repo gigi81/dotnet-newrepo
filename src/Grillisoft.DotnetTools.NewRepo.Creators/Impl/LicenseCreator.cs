@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private readonly IHttpClientFactory _httpClientFactory;
 
         public LicenseCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<LicenseCreator> logger,
             IHttpClientFactory httpClientFactory)
             : base(settings, logger)
@@ -32,7 +33,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
                 responseBody = responseBody.Replace("<year>", _settings.CopyrightYear);
-                responseBody = responseBody.Replace("<copyright holders>", _settings.CopyrightHolders);
+                responseBody = responseBody.Replace("<copyright holders>", _settings.Authors);
 
                 await this.CreateTextFile(this.Root.File(Name), responseBody);
             }

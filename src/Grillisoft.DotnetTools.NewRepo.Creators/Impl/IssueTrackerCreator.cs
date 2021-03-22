@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         public const string Name = ".issuetracker";
 
         public IssueTrackerCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<IssueTrackerCreator> logger)
             : base(settings, logger)
         {
@@ -17,16 +18,14 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(_settings.GithubUsername) ||
-                string.IsNullOrWhiteSpace(_settings.GithubRepoName))
+            if (string.IsNullOrWhiteSpace(_settings.GithubUrl))
             {
                 _logger.LogInformation($"Skipping {Name} creation. Not github settings specified");
                 return;
             }
 
             var content = (await GetTemplateContent(Name))
-                .Replace("username", _settings.GithubUsername)
-                .Replace("repository", _settings.GithubRepoName);
+                .Replace("github_url", _settings.GithubUrl);
 
             await this.CreateTextFile(this.Root.File(Name), content);
         }

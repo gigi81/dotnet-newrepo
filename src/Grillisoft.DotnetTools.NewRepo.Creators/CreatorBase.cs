@@ -15,10 +15,10 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
         private readonly DirectoryInfo _root;
         private readonly DirectoryInfo _src;
         private readonly DirectoryInfo _tests;
-        protected readonly NewRepoSettings _settings;
+        protected readonly INewRepoSettings _settings;
         protected readonly ILogger _logger;
 
-        public CreatorBase(NewRepoSettings settings, ILogger logger)
+        public CreatorBase(INewRepoSettings settings, ILogger logger)
         {
             if (settings == null)
                 throw new ArgumentNullException(nameof(settings));

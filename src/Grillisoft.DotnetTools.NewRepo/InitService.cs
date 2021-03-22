@@ -8,39 +8,33 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Grillisoft.DotnetTools.NewRepo.Abstractions;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
     internal sealed class InitService : BackgroundService
     {
-        private readonly NewRepoSettings _options;
+        private readonly INewRepoSettings _settings;
         private readonly ILogger _logger;
         private readonly IHostApplicationLifetime _appLifetime;
 
         public InitService(
-            NewRepoSettings options,
+            INewRepoSettings settings,
             ILogger<NewRepoService> logger,
             IHostApplicationLifetime appLifetime)
         {
-            _options = options;
+            _settings = settings;
             _logger = logger;
             _appLifetime = appLifetime;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var init = _options.InitFile;
+            var init = _settings.InitFile;
 
             try
             {
-                var jsonOptions = new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                };
-
-                using (var stream = init.OpenWrite())
-                    await JsonSerializer.SerializeAsync(stream, _options, jsonOptions, stoppingToken);
-
+                await _settings.Init(_logger, stoppingToken);
                 _logger.LogInformation($"Created file {init.FullName}");
                 _logger.LogInformation($"Customize your settings in the file then, on the same folder, run: dotnet newrepo");
             }

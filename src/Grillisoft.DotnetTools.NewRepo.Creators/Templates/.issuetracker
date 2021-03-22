@@ -4,4 +4,4 @@
 
 [issuetracker "GitHub"]
   regex = "#(\\d+)"
-  url = "https://github.com/username/repository/issues/$1"
+  url = "github_url/issues/$1"

@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -10,99 +13,68 @@ using System.Threading.Tasks;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
-    public sealed class NewRepoSettings
+    public sealed class NewRepoSettings : INewRepoSettings
     {
         public const string InitFilename = "init.json";
 
         private readonly DirectoryInfo _root;
-        private string _name;
-        private string _copyrightOwner;
-        private string _copyrightYear;
-        private string _githubRepoName;
+        private IDictionary<ConfigurationKey, object> _values;
 
         public NewRepoSettings()
         {
             _root = new DirectoryInfo(".");
+            _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
         }
 
         public NewRepoSettings(string[] args)
         {
             _root = new DirectoryInfo(args.Length > 0 ? args[0] : ".");
+            _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
         }
 
-        [JsonIgnore]
         public DirectoryInfo Root => _root;
 
-        [JsonIgnore]
         public FileInfo InitFile => _root.File(InitFilename);
 
-        public string Name
+        public T Get<T>(ConfigurationKey key)
         {
-            get => _name ?? _root.Name;
-            set => _name = value;
+            throw new NotImplementedException();
         }
 
-        public string Authors { get; set; }
-
-        public string Product { get; set; }
-
-        public string CopyrightHolders
+        public bool GetBool(ConfigurationKey key)
         {
-            get => GetOrDefault(_copyrightOwner, this.Authors);
-            set => _copyrightOwner = value;
+            throw new NotImplementedException();
         }
 
-        public string CopyrightYear
+        public int GetInt32(ConfigurationKey key)
         {
-            get => GetOrDefault(_copyrightYear, DateTime.UtcNow.Year.ToString());
-            set => _copyrightYear = value;
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// The project license's <see cref="https://spdx.org/licenses/">SPDX identifier</see>.
-        /// Only OSI and FSF approved licenses supported
-        /// </summary>
-        public string License { get; set; } = "MIT";
-
-        public string TestFramework { get; set; } = "xunit";
-
-        public string[] GitIgnoreTags { get; set; } = new[] { "csharp", "visualstudio", "visualstudiocode" };
-
-        public bool Benchmark { get; set; } = false;
-
-        public bool AzureDevops { get; set; } = true;
-
-        public bool Appveyor { get; set; } = true;
-
-        public string GithubUsername { get; set; }
-
-        public string GithubRepoName
+        public string GetString(ConfigurationKey key)
         {
-            get => GetOrDefault(_githubRepoName, this.Name);
-            set => _githubRepoName = value;
+            throw new NotImplementedException();
         }
 
-        [JsonIgnore]
-        public string GithubUrl
+        public Task Init(ILogger logger, CancellationToken cancellationToken)
         {
-            get
+            return this.InitFile.WriteAllLinesAsync(GetInitContent(), cancellationToken);
+        }
+
+        private IEnumerable<string> GetInitContent()
+        {
+            yield return "{";
+
+            foreach (var value in _values)
             {
-                if (string.IsNullOrWhiteSpace(this.GithubUsername) ||
-                    string.IsNullOrWhiteSpace(this.GithubRepoName))
-                    return null;
-
-                return $"https://github.com/{GithubUsername}/{GithubRepoName}.git";
+                yield return $"  //{value.Key.Help}";
+                yield return $"  \"{value.Key.Key}\": " + JsonSerializer.Serialize(value.Value);
             }
+
+            yield return "}";
         }
 
-        public string TwitterUsername { get; set; }
-
-        private static string GetOrDefault(string value, string defaultValue)
-        {
-            return string.IsNullOrEmpty(value) ? defaultValue : value;
-        }
-
-        public async Task LoadSettings(ILogger logger, CancellationToken token)
+        public async Task Load(ILogger logger, CancellationToken token)
         {
             var init = this.Root.File(InitFilename);
             if (!init.Exists)
@@ -115,7 +87,8 @@ namespace Grillisoft.DotnetTools.NewRepo
             {
                 logger.LogInformation("Loading settings from {0}", init.FullName);
                 using (var stream = init.OpenRead())
-                    this.Load(await JsonSerializer.DeserializeAsync<NewRepoSettings>(stream, null, token));
+                    _values = (await JsonSerializer.DeserializeAsync<IDictionary<string, object>>(stream, null, token))
+                                .ToDictionary(k => ConfigurationKeysManager.Keys[k.Key], k => k.Value);
             }
             catch (Exception ex)
             {
@@ -123,18 +96,9 @@ namespace Grillisoft.DotnetTools.NewRepo
             }
         }
 
-        public void Load(NewRepoSettings settings)
+        public bool TryGet<T>(ConfigurationKey key, out T value)
         {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings));
-
-            var fields = typeof(NewRepoSettings)
-                .GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
-                .Where(f => !f.IsInitOnly)
-                .ToArray();
-
-            foreach (var field in fields)
-                field.SetValue(this, field.GetValue(settings));
+            throw new NotImplementedException();
         }
     }
 }

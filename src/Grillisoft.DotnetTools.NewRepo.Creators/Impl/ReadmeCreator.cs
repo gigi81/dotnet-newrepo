@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         private readonly IHttpClientFactory _httpClientFactory;
 
         public ReadmeCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<ReadmeCreator> logger,
             IHttpClientFactory httpClientFactory)
             : base(settings, logger)
@@ -32,8 +32,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 response.EnsureSuccessStatusCode();
 
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-                responseBody = responseBody.Replace("github_username", _settings.GithubUsername);
-                responseBody = responseBody.Replace("repo_name", _settings.GithubRepoName);
+                //responseBody = responseBody.Replace("github_username", _settings.GithubUsername);
+                //responseBody = responseBody.Replace("repo_name", _settings.GithubRepoName);
                 responseBody = responseBody.Replace("twitter_handle", _settings.TwitterUsername);
                 responseBody = responseBody.Replace("project_title", _settings.Name);
                 responseBody = responseBody.Replace("project_description", _settings.Product);

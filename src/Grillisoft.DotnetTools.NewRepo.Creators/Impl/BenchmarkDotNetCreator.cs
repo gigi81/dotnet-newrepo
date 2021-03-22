@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
@@ -9,7 +10,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
     public class BenchmarkDotNetCreator : CreatorBase
     {
         public BenchmarkDotNetCreator(
-            NewRepoSettings settings,
+            INewRepoSettings settings,
             ILogger<BenchmarkDotNetCreator> logger)
             : base(settings, logger)
         {
