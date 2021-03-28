@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Grillisoft.DotnetTools.NewRepo
+namespace Grillisoft.DotnetTools.NewRepo.Creators
 {
     [Serializable]
     internal class RepositoryDirectoryNotEmpty : Exception
     {
-        public RepositoryDirectoryNotEmpty(string directory)
-            : base($"Cannot create repository. {directory} is not empty. There are other files in the directory other than " + NewRepoSettings.InitFilename)
+        public RepositoryDirectoryNotEmpty(string directory, string initFile)
+            : base($"Cannot create repository. {directory} is not empty. There are other files in the directory other than {initFile}")
         {
         }
 

@@ -1,4 +1,5 @@
 ﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using Grillisoft.DotnetTools.NewRepo.Configuration.Yaml;
 using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -49,7 +50,7 @@ namespace Grillisoft.DotnetTools.NewRepo
                     args = args.Except(new[] { InitCommand }).ToArray();
 
                     services.AddHttpClient()
-                            .AddSingleton<INewRepoSettings>(new NewRepoSettings(args))
+                            .AddSingleton<INewRepoSettings>(new YamlNewRepoSettings(args))
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()
                             .AddSingleton<ICreator, GitIgnoreCreator>()

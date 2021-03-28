@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Grillisoft.DotnetTools.NewRepo
+namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
 {
-    public sealed class NewRepoSettings : INewRepoSettings
+    public sealed class YamlNewRepoSettings : INewRepoSettings
     {
-        public const string InitFilename = "init.yml";
+        private const string InitFilename = "init.yml";
 
         private readonly DirectoryInfo _root;
         private IDictionary<ConfigurationKey, object> _values;
@@ -27,13 +27,13 @@ namespace Grillisoft.DotnetTools.NewRepo
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
                         .Build();
 
-        public NewRepoSettings()
+        public YamlNewRepoSettings()
         {
             _root = new DirectoryInfo(".");
             _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
         }
 
-        public NewRepoSettings(string[] args)
+        public YamlNewRepoSettings(string[] args)
         {
             _root = new DirectoryInfo(args.Length > 0 ? args[0] : ".");
             _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);

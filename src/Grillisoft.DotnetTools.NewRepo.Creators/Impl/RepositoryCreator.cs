@@ -22,11 +22,13 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             if (!this.Root.Exists)
                 this.Root.Create();
 
+            var initFileName = _settings.InitFile.Name;
+
             await _settings.Load(_logger, token);
 
-            if (this.Root.GetFiles().Where(f => !f.Name.Equals(NewRepoSettings.InitFilename)).Count() > 0 ||
+            if (this.Root.GetFiles().Where(f => !f.Name.Equals(initFileName)).Count() > 0 ||
                 this.Root.GetDirectories().Length > 0)
-                throw new RepositoryDirectoryNotEmpty(this.Root.FullName);
+                throw new RepositoryDirectoryNotEmpty(this.Root.FullName, initFileName);
 
             this.Src.Create();
             this.Tests.Create();
