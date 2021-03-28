@@ -69,10 +69,10 @@ dotnet tool update dotnet-newrepo --global
 #first create a directory host your repo
 mkdir Organization.Project
 cd Organization.Project
-#then create the init.json file (this file is used to specify a few settings like your github username)
+#then create the init.yml file (this file is used to specify a few settings like your github username)
 newrepo init
-#customize the init.json file with your settings
-notepad init.json
+#customize the init.yml file with your custom settings
+notepad init.yml
 #then finally create the repo
 newrepo
 ```

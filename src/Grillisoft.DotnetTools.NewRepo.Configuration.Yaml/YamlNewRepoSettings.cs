@@ -106,7 +106,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
                 using (var reader = new StreamReader(stream))
                 {
                     var ret = await Task.Run(() => YamlDeserializer.Deserialize<Dictionary<string, object>>(reader));
-                    _values = ret.ToDictionary(k => ConfigurationKeysManager.Keys[k.Key], k => GetValue(k.Value, ConfigurationKeysManager.Keys[k.Key]));
+                    _values = ret.ToDictionary(
+                        k => ConfigurationKeysManager.Keys[k.Key],
+                        k => GetValue(k.Value, ConfigurationKeysManager.Keys[k.Key]));
                 }
             }
             catch (Exception ex)
