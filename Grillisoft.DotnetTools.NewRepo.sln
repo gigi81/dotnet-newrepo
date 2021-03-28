@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B0D35F8A-5404-4EED-AEB7-D2D634BE0918}"
 	ProjectSection(SolutionItems) = preProject
 		azure-pipelines.yml = azure-pipelines.yml
+		Directory.Build.props = Directory.Build.props
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
@@ -18,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grillisoft.DotnetTools.NewR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grillisoft.DotnetTools.NewRepo.Creators", "src\Grillisoft.DotnetTools.NewRepo.Creators\Grillisoft.DotnetTools.NewRepo.Creators.csproj", "{081C4FFF-E713-4D77-AFCB-D42BF1B25FE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grillisoft.DotnetTools.NewRepo.Configuration.Yaml", "src\Grillisoft.DotnetTools.NewRepo.Configuration.Yaml\Grillisoft.DotnetTools.NewRepo.Configuration.Yaml.csproj", "{DFEC8CB9-5077-48A6-BE6E-D532740ADA20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grillisoft.DotnetTools.NewRepo.Configuration.Yaml", "src\Grillisoft.DotnetTools.NewRepo.Configuration.Yaml\Grillisoft.DotnetTools.NewRepo.Configuration.Yaml.csproj", "{DFEC8CB9-5077-48A6-BE6E-D532740ADA20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
