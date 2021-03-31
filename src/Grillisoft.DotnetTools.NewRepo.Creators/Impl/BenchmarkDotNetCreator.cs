@@ -44,7 +44,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             await Run("dotnet", "new benchmark", projectDir, cancellationToken);
 
             var project = projectDir.GetFiles("*.csproj").First();
-            await Run("dotnet", $"sln add \"{project.FullName}\"", projectDir, cancellationToken);
+            await Run("dotnet", $"sln add \"{project.FullName}\"", this.Root, cancellationToken);
         }
     }
 }
