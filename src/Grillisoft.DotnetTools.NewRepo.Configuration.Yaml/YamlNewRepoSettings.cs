@@ -105,10 +105,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
                 using (var stream = init.OpenRead())
                 using (var reader = new StreamReader(stream))
                 {
-                    var ret = await Task.Run(() => YamlDeserializer.Deserialize<Dictionary<string, object>>(reader));
-                    _values = ret.ToDictionary(
-                        k => ConfigurationKeysManager.Keys[k.Key],
-                        k => GetValue(k.Value, ConfigurationKeysManager.Keys[k.Key]));
+                    _values = GetValues(await Task.Run(() => YamlDeserializer.Deserialize<Dictionary<string, object>>(reader)));
                 }
             }
             catch (Exception ex)
@@ -117,36 +114,40 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
             }
         }
 
-        private object GetValue(object value, ConfigurationKey key)
+        private IDictionary<ConfigurationKey, object> GetValues(Dictionary<string, object> values)
         {
-            try
+            var ret = new Dictionary<ConfigurationKey, object>();
+
+            foreach(var k in values)
             {
-                if(!key.Type.IsEnumerable(out var itemType))
-                    return Convert.ChangeType(value, key.Type);
+                if (!ConfigurationKeysManager.Keys.TryGetValue(k.Key, out var key))
+                    throw new Exception($"Key '{k.Key}' is not a known configuration key");
 
-                var ret = CreateList(itemType);
-                foreach (var item in (IEnumerable)value)
-                    ret.Add(Convert.ChangeType(item, itemType));
-
-                var array = Array.CreateInstance(itemType, ret.Count);
-                for (int i = 0; i < ret.Count; i++)
-                    array.SetValue(Convert.ChangeType(ret[i], itemType), i);
-
-                return array;
+                ret.Add(key, GetValue(k.Value, key.Type));
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine(key.Key);
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex);
 
-                throw;
-            }
+            return ret;
         }
 
-        private static IList CreateList(Type myType)
+        private static object GetValue(object value, Type keyType)
         {
-            Type genericListType = typeof(List<>).MakeGenericType(myType);
+            if(!keyType.IsEnumerable(out var itemType))
+                return Convert.ChangeType(value, keyType);
+
+            var ret = CreateList(itemType);
+            foreach (var item in (IEnumerable)value)
+                ret.Add(Convert.ChangeType(item, itemType));
+
+            var array = Array.CreateInstance(itemType, ret.Count);
+            for (int i = 0; i < ret.Count; i++)
+                array.SetValue(Convert.ChangeType(ret[i], itemType), i);
+
+            return array;
+        }
+
+        private static IList CreateList(Type itemType)
+        {
+            var genericListType = typeof(List<>).MakeGenericType(itemType);
             return (IList)Activator.CreateInstance(genericListType);
         }
     }
