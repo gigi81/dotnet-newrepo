@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
     {
         private const string InitFilename = "init.yml";
 
-        private readonly DirectoryInfo _root;
+        private readonly IDirectoryInfo _root;
         private IDictionary<ConfigurationKey, object> _values;
 
         private static readonly IDeserializer YamlDeserializer = new DeserializerBuilder()
@@ -27,21 +28,30 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
                         .WithNamingConvention(CamelCaseNamingConvention.Instance)
                         .Build();
 
-        public YamlNewRepoSettings()
+        public YamlNewRepoSettings(IFileSystem fileSystem)
         {
-            _root = new DirectoryInfo(".");
-            _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
+            _root = fileSystem.DirectoryInfo.FromDirectoryName(".");
+            _values = GetDefaults(_root);
         }
 
-        public YamlNewRepoSettings(string[] args)
+        public YamlNewRepoSettings(string[] args, IFileSystem fileSystem)
         {
-            _root = new DirectoryInfo(args.Length > 0 ? args[0] : ".");
-            _values = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
+            _root = fileSystem.DirectoryInfo.FromDirectoryName(args.Length > 0 ? args[0] : ".");
+            _values = GetDefaults(_root);
         }
 
-        public DirectoryInfo Root => _root;
+        private static Dictionary<ConfigurationKey, object> GetDefaults(IDirectoryInfo root)
+        {
+            var ret = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
+            if (String.IsNullOrWhiteSpace(ret[ConfigurationKeysManager.Name] as string))
+                ret[ConfigurationKeysManager.Name] = root.Name;
 
-        public FileInfo InitFile => _root.File(InitFilename);
+            return ret;
+        }
+
+        public IDirectoryInfo Root => _root;
+
+        public IFileInfo InitFile => _root.File(InitFilename);
 
         public T Get<T>(ConfigurationKey key)
         {

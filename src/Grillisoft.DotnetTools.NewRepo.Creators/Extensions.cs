@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,22 +24,12 @@ namespace Grillisoft.DotnetTools.NewRepo
         /// </summary>
         private const FileOptions DefaultOptions = FileOptions.Asynchronous | FileOptions.SequentialScan;
 
-        public static DirectoryInfo SubDirectory(this DirectoryInfo root, string name)
-        {
-            return new DirectoryInfo(Path.Combine(root.FullName, name));
-        }
-
-        public static FileInfo File(this DirectoryInfo root, string name)
-        {
-            return new FileInfo(Path.Combine(root.FullName, name));
-        }
-
-        public static async Task CreateTextFile(this FileInfo file, string content)
+        public static async Task CreateTextFile(this IFileInfo file, string content)
         {
             await CreateTextFile(file, content, UTF8WithoutBom);
         }
 
-        public static async Task CreateTextFile(this FileInfo file, string content, Encoding encoding)
+        public static async Task CreateTextFile(this IFileInfo file, string content, Encoding encoding)
         {
             using(var stream = file.Open(FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream, encoding))
@@ -47,12 +38,12 @@ namespace Grillisoft.DotnetTools.NewRepo
             }
         }
 
-        public static Task<string[]> ReadAllLinesAsync(this FileInfo file, CancellationToken cancellationToken = default)
+        public static Task<string[]> ReadAllLinesAsync(this IFileInfo file, CancellationToken cancellationToken = default)
         {
             return ReadAllLinesAsync(file, Encoding.UTF8, cancellationToken);
         }
 
-        public static async Task<string[]> ReadAllLinesAsync(this FileInfo file, Encoding encoding, CancellationToken cancellationToken = default)
+        public static async Task<string[]> ReadAllLinesAsync(this IFileInfo file, Encoding encoding, CancellationToken cancellationToken = default)
         {
             var lines = new List<string>();
 
@@ -72,22 +63,22 @@ namespace Grillisoft.DotnetTools.NewRepo
             return lines.ToArray();
         }
 
-        public static Task WriteAllLinesAsync(this FileInfo file, IEnumerable<string> lines, CancellationToken cancellationToken = default)
+        public static Task WriteAllLinesAsync(this IFileInfo file, IEnumerable<string> lines, CancellationToken cancellationToken = default)
         {
             return WriteAllLinesAsync(file, lines, UTF8WithoutBom, cancellationToken);
         }
 
-        public static Task WriteAllLinesAsync(this FileInfo file, IEnumerable<string> lines, Encoding encoding, CancellationToken cancellationToken = default)
+        public static Task WriteAllLinesAsync(this IFileInfo file, IEnumerable<string> lines, Encoding encoding, CancellationToken cancellationToken = default)
         {
             return WriteText(file, lines.JoinLines(), encoding, cancellationToken);
         }
 
-        public static Task WriteText(this FileInfo file, StringBuilder builder, CancellationToken cancellationToken = default)
+        public static Task WriteText(this IFileInfo file, StringBuilder builder, CancellationToken cancellationToken = default)
         {
             return WriteText(file, builder, UTF8WithoutBom, cancellationToken);
         }
 
-        public static async Task WriteText(this FileInfo file, StringBuilder builder, Encoding encoding, CancellationToken cancellationToken = default)
+        public static async Task WriteText(this IFileInfo file, StringBuilder builder, Encoding encoding, CancellationToken cancellationToken = default)
         {
             using (var stream = new FileStream(file.FullName, file.Exists ? FileMode.Truncate : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, DefaultBufferSize, DefaultOptions))
             using (var writer = new StreamWriter(stream, encoding))

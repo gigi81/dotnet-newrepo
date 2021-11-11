@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.IO;
+using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,9 +8,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
 {
     public interface INewRepoSettings
     {
-        DirectoryInfo Root { get; }
+        IDirectoryInfo Root { get; }
 
-        FileInfo InitFile { get; }
+        IFileInfo InitFile { get; }
 
         bool Appveyor => GetBool(ConfigurationKeysManager.Appveyor);
         string Authors => GetString(ConfigurationKeysManager.Authors);

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            var dirs = new Dictionary<DirectoryInfo, string>
+            var dirs = new Dictionary<IDirectoryInfo, string>
             {
                 { this.Root,  "Root"  },
                 { this.Src,   "Src"   },

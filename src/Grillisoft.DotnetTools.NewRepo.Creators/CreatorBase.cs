@@ -1,20 +1,21 @@
 ﻿using SimpleExec;
 using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Grillisoft.DotnetTools.NewRepo.Abstractions;
+using System.IO;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators
 {
     public abstract class CreatorBase : ICreator
     {
-        private readonly DirectoryInfo _root;
-        private readonly DirectoryInfo _src;
-        private readonly DirectoryInfo _tests;
+        private readonly IDirectoryInfo _root;
+        private readonly IDirectoryInfo _src;
+        private readonly IDirectoryInfo _tests;
         protected readonly INewRepoSettings _settings;
         protected readonly ILogger _logger;
 
@@ -34,13 +35,13 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
 
         public abstract Task Create(CancellationToken cancellationToken);
 
-        public DirectoryInfo Root => _root;
+        public IDirectoryInfo Root => _root;
 
-        public DirectoryInfo Src => _src;
+        public IDirectoryInfo Src => _src;
 
-        public DirectoryInfo Tests => _tests;
+        public IDirectoryInfo Tests => _tests;
 
-        public IEnumerable<DirectoryInfo> All
+        public IEnumerable<IDirectoryInfo> All
         {
             get
             {
@@ -55,7 +56,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
             await Run(name, args, this.Root, cancellationToken);
         }
 
-        protected async Task Run(string name, string args, DirectoryInfo workingDirectory, CancellationToken cancellationToken)
+        protected async Task Run(string name, string args, IDirectoryInfo workingDirectory, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Running command {0} {1}", name, args);
             await Command.RunAsync(name, args, workingDirectory.FullName, false, null, null, null, null, false, cancellationToken);
@@ -72,7 +73,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
             }
         }
 
-        protected async Task CreateTextFile(FileInfo file, string content)
+        protected async Task CreateTextFile(IFileInfo file, string content)
         {
             _logger.LogInformation("Creating file {0}", file.FullName);
             await file.CreateTextFile(content);

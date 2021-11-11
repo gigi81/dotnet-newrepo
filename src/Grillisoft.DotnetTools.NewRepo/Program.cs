@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO.Abstractions;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
@@ -50,7 +51,8 @@ namespace Grillisoft.DotnetTools.NewRepo
                     args = args.Except(new[] { InitCommand }).ToArray();
 
                     services.AddHttpClient()
-                            .AddSingleton<INewRepoSettings>(new YamlNewRepoSettings(args))
+                            .AddSingleton<IFileSystem>(new FileSystem())
+                            .AddSingleton<INewRepoSettings>(provider => new YamlNewRepoSettings(args, provider.GetRequiredService<IFileSystem>()))
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()
                             .AddSingleton<ICreator, GitIgnoreCreator>()

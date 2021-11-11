@@ -7,12 +7,13 @@
   <ItemGroup>
     <Compile Include="..\Grillisoft.DotnetTools.NewRepo.Creators\Extensions.cs" Link="Extensions.cs" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\Grillisoft.DotnetTools.NewRepo.Abstractions\Grillisoft.DotnetTools.NewRepo.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet" Version="10.0.0" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" Version="1.0.14" />
   </ItemGroup>
 </Project>

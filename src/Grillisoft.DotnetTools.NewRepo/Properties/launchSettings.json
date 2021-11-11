@@ -2,7 +2,7 @@
   "profiles": {
     "Grillisoft.DotnetTools.NewRepo": {
       "commandName": "Project",
-      "commandLineArgs": "D:\\Temp\\Grillisoft.Test3"
+      "commandLineArgs": "D:\\Temp\\Grillisoft.Test6"
     }
   }
 }
