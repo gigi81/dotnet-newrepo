@@ -7,6 +7,9 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>newrepo</ToolCommandName>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>A command line dotnet tool to create a git repo for a dotnet project including folders, solution, test project, readme, license, azure devops build template and more...</Description>
+    <PackageTags>Github;Azure DevOps;dotnet;cli;repo;git</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +17,7 @@
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="../../README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
