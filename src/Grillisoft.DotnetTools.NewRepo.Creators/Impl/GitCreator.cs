@@ -22,13 +22,20 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             await Run("git", "add -A", cancellationToken);
             await Run("git", "commit -m \"Initial commit\"", cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(_settings.GithubUrl))
+            if (!string.IsNullOrWhiteSpace(_settings.GithubUrl))
             {
-                _logger.LogInformation($"Cannot set git remote. Not github settings specified");
+                await Run("git", $"remote add origin {_settings.GithubUrl}", cancellationToken);
                 return;
             }
 
-            await Run("git", $"remote add origin {_settings.GithubUrl}", cancellationToken);
+            if (!string.IsNullOrWhiteSpace(_settings.AzureDevOpsGitRemoteUrl))
+            {
+                await Run("git", $"remote add origin {_settings.AzureDevOpsGitRemoteUrl}", cancellationToken);
+                return;
+            }
+
+            _logger.LogInformation($"Cannot set git remote. Not github or azure devops settings specified");
+            return;
         }
     }
 }

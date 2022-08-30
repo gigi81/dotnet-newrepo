@@ -7,12 +7,10 @@
   <PropertyGroup>
     <Authors></Authors>
     <Product></Product>
-	  <PackageProjectUrl></PackageProjectUrl>
+	<PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
     <PackageLicenseExpression></PackageLicenseExpression>
-    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)key.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 </Project>

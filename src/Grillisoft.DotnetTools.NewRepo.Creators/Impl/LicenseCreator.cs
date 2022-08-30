@@ -1,5 +1,6 @@
 ﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO.Abstractions;
 using System.Net.Http;
 using System.Threading;
@@ -26,6 +27,9 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
+            if (String.IsNullOrWhiteSpace(_settings.License) || _settings.License.Equals("none", StringComparison.CurrentCultureIgnoreCase))
+                return;
+
             using (var client = _httpClientFactory.CreateClient())
             {
                 _logger.LogInformation("Downloading {0} from {1}", Name, this.Url);

@@ -11,13 +11,18 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         public static readonly ConfigurationKey Product = StringKey("product", "Product description");
         public static readonly ConfigurationKey Github = StringKey("github", "The github repository name where this project will be hosted (ex. yourUsername/repo)");
         public static readonly ConfigurationKey CopyrightYears = StringKey("copyrightYears", "Copyright years (ex. 2021 or 2010-2021)", DateTime.Now.Year.ToString());
-        public static readonly ConfigurationKey License = StringKey("license", "The project license's SPDX identifier. Only OSI and FSF approved licenses supported, see https://spdx.org/licenses/", "MIT");
+        public static readonly ConfigurationKey License = StringKey("license", "The project license's SPDX identifier or 'none' for no explicit license. Only OSI and FSF approved licenses supported, see https://spdx.org/licenses/", "MIT");
         public static readonly ConfigurationKey TestFramework = StringKey("testFramework", "Your test framework of choice (ex xunit or nunit)", "xunit");
-        public static readonly ConfigurationKey IgnoreTags = new ConfigurationKey("ignoreTags", typeof(string[]), "Tags used to generate the .gitignore file, see https://www.toptal.com/developers/gitignore", new[] { "csharp", "visualstudio", "visualstudiocode", "rider" });
-        public static readonly ConfigurationKey Benchmark = BoolKey("benchmark", "Set to true if you want to add a BenchmarkDotnet project added to the solution", false);
-        public static readonly ConfigurationKey AzureDevops = BoolKey("azureDevops", "Set to true if you plan to build the project in azure devops", true);
+        public static readonly ConfigurationKey IgnoreTags = new ConfigurationKey("ignoreTags", typeof(string[]), "Tags used to generate the .gitignore file, see https://www.toptal.com/developers/gitignore", new[] { "csharp", "visualstudio", "visualstudiocode", "rider", "node" });
+        public static readonly ConfigurationKey Benchmark = BoolKey("benchmark", "Set to true if you want a BenchmarkDotnet project added to the solution", false);
+
+        public static readonly ConfigurationKey AzureDevOpsGitRemoteUrl = StringKey("adourl", "Your Azure DevOps url (ex. https://organization.visualstudio.com/DefaultCollection/project/_git/reponame)");
+        public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", true);
+
         public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
         public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
+
+        public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", false);
 
         public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new Lazy<IDictionary<string, ConfigurationKey>>(GetKeys);
 

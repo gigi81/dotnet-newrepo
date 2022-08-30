@@ -26,6 +26,12 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
+            if(_settings.EmptyReadme)
+            {
+                await this.CreateTextFile(this.Root.File(Name), $"##{_settings.Name}");
+                return;
+            }
+
             using (var client = _httpClientFactory.CreateClient())
             {
                 _logger.LogInformation("Downloading {0} from {1}", Name, this.Url);
