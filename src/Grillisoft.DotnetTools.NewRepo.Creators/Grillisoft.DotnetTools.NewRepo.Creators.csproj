@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Templates\*" />
     <EmbeddedResource Include="Templates\*" />
@@ -14,10 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.6.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.*" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.*" />
-    <PackageReference Include="SimpleExec" Version="7.0.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
-    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" Version="1.0.14" />
+    <PackageReference Include="System.IO.Abstractions" Version="19.1.14" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" Version="1.0.39" />
   </ItemGroup>
 </Project>

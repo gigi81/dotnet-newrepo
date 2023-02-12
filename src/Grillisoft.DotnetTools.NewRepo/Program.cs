@@ -3,7 +3,7 @@ using Grillisoft.DotnetTools.NewRepo.Configuration.Yaml;
 using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,6 +23,9 @@ namespace Grillisoft.DotnetTools.NewRepo
             }
             catch(Exception ex)
             {
+                if(Environment.ExitCode == ExitCode.Ok)
+                    Environment.ExitCode = ExitCode.GenericError;
+
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex);
             }
@@ -36,10 +39,10 @@ namespace Grillisoft.DotnetTools.NewRepo
                 {
                     options.SuppressStatusMessages = true;
                 })
-                .ConfigureLogging(logging =>
+                .UseSerilog((hostingContext, services, loggerConfiguration) =>
                 {
-                    logging.ClearProviders()
-                           .AddLog4Net();
+                    loggerConfiguration.Enrich.FromLogContext()
+                                       .WriteTo.Console();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

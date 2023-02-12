@@ -36,10 +36,12 @@ namespace Grillisoft.DotnetTools.NewRepo
                 _logger.LogInformation("Creating dotnet repo in {0}", _settings.Root.FullName);
                 await RunCreators(stoppingToken);
                 _logger.LogInformation("Repository {0} created in {1}", _settings.Root.FullName, watch.Elapsed);
+                Environment.ExitCode = ExitCode.Ok;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while creating dotnet repo: " + ex.Message);
+                Environment.ExitCode = ExitCode.GenericError;
             }
             finally
             {

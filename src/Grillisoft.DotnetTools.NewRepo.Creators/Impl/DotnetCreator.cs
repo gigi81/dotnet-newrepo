@@ -19,16 +19,16 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         {
         }
 
+        public override bool IsParallel => false;
+
         public async override Task Create(CancellationToken cancellationToken)
         {
             var src = this.Src.CreateSubdirectory(_settings.Name);
             var tests = this.Tests.CreateSubdirectory(_settings.Name + ".Tests");
 
-            await Task.WhenAll(
-                Run("dotnet", "new sln", cancellationToken),
-                Run("dotnet", "new classlib", src, cancellationToken),
-                Run("dotnet", "new " + _settings.TestFramework, tests, cancellationToken)
-            );
+            await Run("dotnet", "new sln", cancellationToken);
+            await Run("dotnet", "new classlib", src, cancellationToken);
+            await Run("dotnet", "new " + _settings.TestFramework, tests, cancellationToken);
 
             var projects = this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories)
                                .Select(prj => "\"" + prj.FullName + "\"");

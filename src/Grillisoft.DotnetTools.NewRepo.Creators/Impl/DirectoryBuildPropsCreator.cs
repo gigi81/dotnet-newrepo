@@ -19,6 +19,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
         {
         }
 
+        public override bool IsParallel => false;
+
         public override async Task Create(CancellationToken cancellationToken)
         {
             var dirs = new Dictionary<IDirectoryInfo, string>

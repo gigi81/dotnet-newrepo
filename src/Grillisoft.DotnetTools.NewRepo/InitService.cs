@@ -32,10 +32,12 @@ namespace Grillisoft.DotnetTools.NewRepo
                 await _settings.Init(_logger, stoppingToken);
                 _logger.LogInformation($"Created file {init.FullName}");
                 _logger.LogInformation($"Customize your settings in the file then, on the same folder, run: dotnet newrepo");
+                Environment.ExitCode = ExitCode.Ok;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Error while creating file {init.FullName}: " + ex.Message);
+                Environment.ExitCode = ExitCode.GenericError;
             }
             finally
             {

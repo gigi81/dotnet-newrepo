@@ -30,13 +30,13 @@ namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
 
         public YamlNewRepoSettings(IFileSystem fileSystem)
         {
-            _root = fileSystem.DirectoryInfo.FromDirectoryName(".");
+            _root = fileSystem.DirectoryInfo.New(".");
             _values = GetDefaults(_root);
         }
 
         public YamlNewRepoSettings(string[] args, IFileSystem fileSystem)
         {
-            _root = fileSystem.DirectoryInfo.FromDirectoryName(args.Length > 0 ? args[0] : ".");
+            _root = fileSystem.DirectoryInfo.New(args.Length > 0 ? args[0] : ".");
             _values = GetDefaults(_root);
         }
 

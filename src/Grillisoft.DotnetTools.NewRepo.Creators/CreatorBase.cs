@@ -1,5 +1,4 @@
-﻿using SimpleExec;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using System.IO;
+using CliWrap;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators
 {
@@ -59,7 +59,15 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators
         protected async Task Run(string name, string args, IDirectoryInfo workingDirectory, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Running command {0} {1}", name, args);
-            await Command.RunAsync(name, args, workingDirectory.FullName, false, null, null, null, null, false, cancellationToken);
+            await using var stdOut = Console.OpenStandardOutput();
+            await using var stdErr = Console.OpenStandardError();
+
+            await Cli.Wrap(name)
+                .WithArguments(args)
+                .WithWorkingDirectory(workingDirectory.FullName)
+                .WithStandardOutputPipe(PipeTarget.ToStream(stdOut))
+                .WithStandardErrorPipe(PipeTarget.ToStream(stdErr))
+                .ExecuteAsync(cancellationToken);
         }
 
         protected async Task<string> GetTemplateContent(string resourceName)
