@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
-using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using System.IO;
+using System.IO.Abstractions;
 using CliWrap;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators
