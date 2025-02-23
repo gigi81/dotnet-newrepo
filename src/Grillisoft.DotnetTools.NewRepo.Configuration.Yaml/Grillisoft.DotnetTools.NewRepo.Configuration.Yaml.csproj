@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="13.0.0" />
-    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" Version="1.0.39" />
+    <PackageReference Include="YamlDotNet" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" />
   </ItemGroup>
 </Project>
