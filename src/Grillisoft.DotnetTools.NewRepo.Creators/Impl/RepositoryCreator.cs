@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Grillisoft.DotnetTools.NewRepo.Creators.Exceptions;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
