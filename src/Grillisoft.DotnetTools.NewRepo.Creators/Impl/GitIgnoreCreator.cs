@@ -1,4 +1,5 @@
-﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
+﻿using System;
+using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.IO.Abstractions;
 using System.Net.Http;
@@ -26,15 +27,34 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
-            using (var client = _httpClientFactory.CreateClient())
+            var responseBody = await DownloadGitIgnore(cancellationToken);
+
+            if (!string.IsNullOrWhiteSpace(responseBody))
             {
+                await this.CreateTextFile(this.Root.File(Name), responseBody);                
+            }
+            else
+            {
+                _logger.LogWarning("Creating gitignore using dotnet command as fallback");
+                await Run("dotnet", "new .gitignore", cancellationToken);
+            }
+        }
+
+        private async Task<string> DownloadGitIgnore(CancellationToken cancellationToken)
+        {
+            try
+            {
+                using var client = _httpClientFactory.CreateClient();
                 _logger.LogInformation("Downloading {0} from {1}", Name, this.Url);
                 var response = await client.GetAsync(this.Url, cancellationToken);
                 response.EnsureSuccessStatusCode();
 
-                var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
-
-                await this.CreateTextFile(this.Root.File(Name), responseBody);
+                return await response.Content.ReadAsStringAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to download {0} from {1}", this.Name, this.Url);
+                return string.Empty;
             }
         }
     }

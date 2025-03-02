@@ -30,8 +30,16 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             if (String.IsNullOrWhiteSpace(_settings.License) || _settings.License.Equals("none", StringComparison.CurrentCultureIgnoreCase))
                 return;
 
-            using (var client = _httpClientFactory.CreateClient())
+            var licenseText = await DownloadLicense(cancellationToken);
+            if(!string.IsNullOrWhiteSpace(licenseText))
+                await this.CreateTextFile(this.Root.File(Name), licenseText);
+        }
+
+        private async Task<string> DownloadLicense(CancellationToken cancellationToken)
+        {
+            try
             {
+                using var client = _httpClientFactory.CreateClient();
                 _logger.LogInformation("Downloading {0} from {1}", Name, this.Url);
                 var response = await client.GetAsync(this.Url, cancellationToken);
                 response.EnsureSuccessStatusCode();
@@ -39,8 +47,12 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
                 var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
                 responseBody = responseBody.Replace("<year>", _settings.CopyrightYear);
                 responseBody = responseBody.Replace("<copyright holders>", _settings.Authors);
-
-                await this.CreateTextFile(this.Root.File(Name), responseBody);
+                return responseBody;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to download license text. The {Name} file will not been created", this.Name);
+                return string.Empty;
             }
         }
     }

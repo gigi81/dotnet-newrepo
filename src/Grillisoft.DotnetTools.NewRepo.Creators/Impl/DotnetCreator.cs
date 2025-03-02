@@ -21,7 +21,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override bool IsParallel => false;
 
-        public async override Task Create(CancellationToken cancellationToken)
+        public override async Task Create(CancellationToken cancellationToken)
         {
             var src = this.Src.CreateSubdirectory(_settings.Name);
             var tests = this.Tests.CreateSubdirectory(_settings.Name + ".Tests");
