@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO.Abstractions;
+using System.Net;
+using System.Net.Http;
 
 namespace Grillisoft.DotnetTools.NewRepo
 {
@@ -53,8 +55,12 @@ namespace Grillisoft.DotnetTools.NewRepo
 
                     args = args.Except(new[] { InitCommand }).ToArray();
 
+                    var handler = new HttpClientHandler();
+                    handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+                    
                     services.AddHttpClient()
-                            .AddSingleton<IFileSystem>(new FileSystem())
+                            .ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(() => handler))
+                            .AddSingleton<IFileSystem, FileSystem>()
                             .AddSingleton<INewRepoSettings>(provider => new YamlNewRepoSettings(args, provider.GetRequiredService<IFileSystem>()))
                             //this MUST be the FIRST one as it creates the main directories
                             .AddSingleton<ICreator, RepositoryCreator>()

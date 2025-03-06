@@ -31,11 +31,9 @@ namespace Grillisoft.DotnetTools.NewRepo
 
         public static async Task CreateTextFile(this IFileInfo file, string content, Encoding encoding)
         {
-            using(var stream = file.Open(FileMode.Create, FileAccess.Write))
-            using (var writer = new StreamWriter(stream, encoding))
-            {
-                await writer.WriteAsync(content);
-            }
+            await using var stream = file.Open(FileMode.Create, FileAccess.Write);
+            await using var writer = new StreamWriter(stream, encoding);
+            await writer.WriteAsync(content);
         }
 
         public static Task<string[]> ReadAllLinesAsync(this IFileInfo file, CancellationToken cancellationToken = default)
@@ -49,15 +47,12 @@ namespace Grillisoft.DotnetTools.NewRepo
 
             // Open the FileStream with the same FileMode, FileAccess
             // and FileShare as a call to File.OpenText would've done.
-            using (var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions))
-            using (var reader = new StreamReader(stream, encoding))
+            await using var stream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, DefaultOptions);
+            using var reader = new StreamReader(stream, encoding);
+            while (await reader.ReadLineAsync(cancellationToken) is { } line)
             {
-                string line;
-                while ((line = await reader.ReadLineAsync()) != null)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    lines.Add(line);
-                }
+                cancellationToken.ThrowIfCancellationRequested();
+                lines.Add(line);
             }
 
             return lines.ToArray();
@@ -80,9 +75,9 @@ namespace Grillisoft.DotnetTools.NewRepo
 
         public static async Task WriteText(this IFileInfo file, StringBuilder builder, Encoding encoding, CancellationToken cancellationToken = default)
         {
-            using (var stream = new FileStream(file.FullName, file.Exists ? FileMode.Truncate : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, DefaultBufferSize, DefaultOptions))
-            using (var writer = new StreamWriter(stream, encoding))
-                await writer.WriteAsync(builder, cancellationToken);
+            await using var stream = new FileStream(file.FullName, file.Exists ? FileMode.Truncate : FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write, DefaultBufferSize, DefaultOptions);
+            await using var writer = new StreamWriter(stream, encoding);
+            await writer.WriteAsync(builder, cancellationToken);
         }
 
         public static StringBuilder JoinLines(this IEnumerable<string> lines)

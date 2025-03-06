@@ -10,10 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.6.0" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="6.*" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.*" />
-    <PackageReference Include="System.IO.Abstractions" Version="19.1.14" />
-    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" Version="1.0.39" />
+    <PackageReference Include="CliWrap" />
+    <PackageReference Include="Microsoft.Extensions.Http" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions" />
+    <PackageReference Include="TestableIO.System.IO.Abstractions.Extensions" />
   </ItemGroup>
 </Project>
