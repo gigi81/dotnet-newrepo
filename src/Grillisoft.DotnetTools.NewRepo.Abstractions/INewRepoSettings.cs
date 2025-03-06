@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +26,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         string TestFramework => GetString(ConfigurationKeysManager.TestFramework);
         string TwitterUsername => GetString(ConfigurationKeysManager.Twitter);
         bool EmptyReadme => GetBool(ConfigurationKeysManager.EmptyReadme);
+        bool CentralPackageManagement => GetBool(ConfigurationKeysManager.CentralPackageManagement);
         string GetString(ConfigurationKey key);
 
         int GetInt32(ConfigurationKey key);

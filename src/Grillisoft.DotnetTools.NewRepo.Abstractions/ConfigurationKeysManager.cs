@@ -23,6 +23,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
 
         public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", false);
+        
+        public static readonly ConfigurationKey CentralPackageManagement = BoolKey("centralPackageManagement", "Set to true if you want to enable central package management", true);
 
         public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new Lazy<IDictionary<string, ConfigurationKey>>(GetKeys);
 

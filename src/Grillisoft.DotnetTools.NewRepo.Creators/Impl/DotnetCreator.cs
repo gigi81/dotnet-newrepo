@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.IO.Abstractions;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
@@ -23,12 +24,21 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override async Task Create(CancellationToken cancellationToken)
         {
+            var emptyProjectContent = await GetTemplateContent("EmptyProject.props");
             var src = this.Src.CreateSubdirectory(_settings.Name);
             var tests = this.Tests.CreateSubdirectory(_settings.Name + ".Tests");
 
             await Run("dotnet", "new sln", cancellationToken);
-            await Run("dotnet", "new classlib", src, cancellationToken);
-            await Run("dotnet", "new " + _settings.TestFramework, tests, cancellationToken);
+            await CreateTextFile(src.File(src.Name + ".csproj"), emptyProjectContent);
+
+            if (_settings.TestFramework.Equals("xunit"))
+            {
+                await CreateTextFile(tests.File(tests.Name + ".csproj"), emptyProjectContent);    
+            }
+            else
+            {
+                await Run("dotnet", "new " + _settings.TestFramework, tests, cancellationToken);
+            }
 
             var projects = this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories)
                                .Select(prj => "\"" + prj.FullName + "\"");

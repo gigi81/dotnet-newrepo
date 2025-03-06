@@ -1,7 +1,6 @@
 ﻿using Grillisoft.DotnetTools.NewRepo.Abstractions;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Abstractions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +9,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 {
     public class DirectoryBuildPropsCreator : CreatorBase
     {
-        public const string Name = "Directory.Build.props";
+        private const string Name = "Directory.Build.props";
+        private const string CentralPackageManagementName = "Directory.Packages.props";
 
         public DirectoryBuildPropsCreator(
             INewRepoSettings settings,
@@ -34,6 +34,12 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
             {
                 var content = await GetTemplateContent(entry.Value + Name);
                 await this.CreateTextFile(entry.Key.File(Name), content);
+            }
+
+            if (_settings.CentralPackageManagement)
+            {
+                var content = await GetTemplateContent(CentralPackageManagementName);
+                await this.CreateTextFile(this.Root.File(CentralPackageManagementName), content);
             }
         }
     }

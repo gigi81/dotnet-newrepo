@@ -7,4 +7,10 @@
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 
+  <!-- Makes the matching .Tests project a friend so internals are visibile to the test project, useful for testing -->
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>
