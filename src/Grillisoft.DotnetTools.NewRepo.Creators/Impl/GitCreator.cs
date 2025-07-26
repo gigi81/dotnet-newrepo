@@ -16,26 +16,20 @@ namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl
 
         public override bool IsParallel => false;
 
-        public async override Task Create(CancellationToken cancellationToken)
+        public override async Task Create(CancellationToken cancellationToken)
         {
             await Run("git", "init", cancellationToken);
             await Run("git", "add -A", cancellationToken);
             await Run("git", "commit -m \"Initial commit\"", cancellationToken);
 
-            if (!string.IsNullOrWhiteSpace(_settings.GithubUrl))
+            if (string.IsNullOrWhiteSpace(_settings.GitRemoteUrl))
             {
-                await Run("git", $"remote add origin {_settings.GithubUrl}", cancellationToken);
+                _logger.LogWarning("Could not set git remote. No github or azure devops settings specified");
                 return;
             }
-
-            if (!string.IsNullOrWhiteSpace(_settings.AzureDevOpsGitRemoteUrl))
-            {
-                await Run("git", $"remote add origin {_settings.AzureDevOpsGitRemoteUrl}", cancellationToken);
-                return;
-            }
-
-            _logger.LogInformation($"Cannot set git remote. Not github or azure devops settings specified");
-            return;
+            
+            _logger.LogInformation("Setting git remote to {GitRemoteUrl}", _settings.GitRemoteUrl);
+            await Run("git", $"remote add origin {_settings.GitRemoteUrl}", cancellationToken);
         }
     }
 }

@@ -17,14 +17,16 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         public static readonly ConfigurationKey Benchmark = BoolKey("benchmark", "Set to true if you want a BenchmarkDotnet project added to the solution", false);
 
         public static readonly ConfigurationKey AzureDevOpsGitRemoteUrl = StringKey("adourl", "Your Azure DevOps url (ex. https://organization.visualstudio.com/DefaultCollection/project/_git/reponame)");
-        public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", true);
+        public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", false);
 
         public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
         public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
 
-        public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", false);
+        public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", true);
+        
+        public static readonly ConfigurationKey EnableSlnx = BoolKey("enableSlnx", "Set to true if you want to use the slnx format for the solution file instead of the classic sln format", true);
 
-        public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new Lazy<IDictionary<string, ConfigurationKey>>(GetKeys);
+        public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new(GetKeys);
 
         public static IDictionary<string, ConfigurationKey> Keys => _keys.Value;
 
