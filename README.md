@@ -6,43 +6,21 @@
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
-<br />
-<p align="center">
-  <h3 align="center">dotnet newrepo</h3>
+## Table of Contents
+- [About The Project](#about-the-project)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-  <p align="center">
-    This is a dotnet tool to create a git repo for a dotnet project including folders, solution, test project, readme, license, azure devops build template and more...
-    <br />
-    <br />
-    <a href="https://github.com/gigi81/dotnet-newrepo/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/gigi81/dotnet-newrepo/issues">Request Feature</a>
-  </p>
-</p>
-
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary><h2 style="display: inline-block">Table of Contents</h2></summary>
-  <ol>
-    <li><a href="#about-the-project">About The Project</a></li>
-    <li><a href="#prerequisites">Prerequisites</a></li>
-    <li><a href="#installation">Installation</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ol>
-</details>
-
-
-
-<!-- ABOUT THE PROJECT -->
 ## About The Project
-There is some sort of an [unofficial standard structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814) when it comes to dotnet repositories.
+There is an [unofficial standard structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814) when it comes to dotnet repositories.
 For example having a 'src' and 'tests' folder, a solution on the root, etc.
-As I was finding myself recreating this sctructure multiple times, I decided to create this tool which helps to create
-as much as possible of an entire repository structure, so that you can focus on addding your value and code instead of
+As I was finding myself recreating this same structure again and again, I decided to create this tool which helps to create
+as much as possible of an entire repository structure, so that you can focus on adding your value and code instead of
 worrying about things like how to build the project or how to share settings between projects with DirectoryBuildProps.
 
 ## Prerequisites
@@ -90,10 +68,6 @@ Contributions are what make the open source community such an amazing place to b
 ## License
 
 Distributed under the MIT License. See <a href="LICENSE.md">`LICENSE.md`</a> for more information.
-
-## Contact
-
-Luigi Grilli - [@gigifun](https://twitter.com/gigifun)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
