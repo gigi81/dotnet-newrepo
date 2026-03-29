@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'release/**' ]
+    branches: [ main, 'release/**', 'feature/**' ]
   pull_request:
     branches: [ main ]
 
@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore /p:Version=1.0.0.${{ github.run_number }} /p:PackageOutputPath="${{ github.workspace }}/artifacts"
+      run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore /p:PackageOutputPath="${{ github.workspace }}/artifacts"
 
     - name: Test
       run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --collect "Code coverage"
@@ -34,7 +34,7 @@ jobs:
       run: dotnet nuget add source --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
 
     - name: Push to GitHub Packages
-      if: github.event_name == 'push'
+      if: startsWith(github.ref, 'refs/heads/main')
       run: dotnet nuget push "artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
     - name: Push to NuGet.org
