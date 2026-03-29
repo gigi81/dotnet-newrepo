@@ -30,8 +30,8 @@ jobs:
       - name: Run .NET tests
         run: dotnet test --configuration Release --report-trx --results-directory ./TestResults --coverage --coverage-output-format cobertura || true
       - name: .NET test report
-        uses: dorny/test-reporter@v1.9.1
-        if: always()
+        uses: dorny/test-reporter@v3
+        if: ${{ !cancelled() }}
         with:
           name: test-results-dotnet-${{ matrix.os }}
           path: "./TestResults/*.trx"
@@ -43,7 +43,7 @@ jobs:
           dotnet tool install -g trx2junit
           trx2junit "./TestResults/*.trx" --output ./junit
       - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: Code coverage ${{ matrix.os }}
           path: |
@@ -53,12 +53,12 @@ jobs:
         if: runner.os == 'Linux'
         with:
           report_type: coverage
-          files: "./TestResults/*.cobertura.xml,./TestResults/web-coverage/lcov.info"
+          files: "./TestResults/*.cobertura.xml"
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Upload test results to Codecov
         if: ${{ (!cancelled()) && (runner.os == 'Linux') }}
         uses: codecov/codecov-action@v5
         with:
           report_type: test_results
-          files: "junit/*.xml,./TestResults/bun-junit.xml"
+          files: "junit/*.xml"
           token: ${{ secrets.CODECOV_TOKEN }}
