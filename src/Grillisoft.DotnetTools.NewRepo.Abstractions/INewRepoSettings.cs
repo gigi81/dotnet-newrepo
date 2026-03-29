@@ -12,9 +12,10 @@ public interface INewRepoSettings
 
     IFileInfo InitFile { get; }
 
-    bool Appveyor => GetBool(ConfigurationKeysManager.Appveyor);
     string Authors => GetString(ConfigurationKeysManager.Authors);
+    bool Abstractions => GetBool(ConfigurationKeysManager.Abstractions);
     bool Benchmark => GetBool(ConfigurationKeysManager.Benchmark);
+    bool Contracts => GetBool(ConfigurationKeysManager.Contracts);
     string CopyrightYear => GetString(ConfigurationKeysManager.CopyrightYears);
     string Github => GetString(ConfigurationKeysManager.Github);
     string GithubUrl => string.IsNullOrWhiteSpace(this.Github) ? null : $"https://github.com/{Github}.git";

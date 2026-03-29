@@ -29,6 +29,23 @@ public class DotnetCreator : CreatorBase
 
         await Run("dotnet", "new sln", cancellationToken);
         await Run("dotnet", "new classlib", src, cancellationToken);
+
+        IDirectoryInfo contracts = null;
+        if (_settings.Contracts)
+        {
+            contracts = this.Src.CreateSubdirectory(_settings.Name + ".Contracts");
+            await Run("dotnet", "new classlib", contracts, cancellationToken);
+        }
+
+        if (_settings.Abstractions)
+        {
+            var abstractions = this.Src.CreateSubdirectory(_settings.Name + ".Abstractions");
+            await Run("dotnet", "new classlib", abstractions, cancellationToken);
+
+            if (contracts != null)
+                await Run("dotnet", $"add reference \"{contracts.FullName}\"", abstractions, cancellationToken);
+        }
+
         await Run("dotnet", "new classlib", tests, cancellationToken);
 
         var projects = this.Root.GetFiles("*.csproj", System.IO.SearchOption.AllDirectories)
