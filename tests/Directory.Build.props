@@ -11,11 +11,13 @@
     <Using Include="TUnit.Assertions.Extensions" />
     <Using Include="AwesomeAssertions" />
     <Using Include="Microsoft.Extensions.Logging.Abstractions" />
+    <Using Include="System.Threading.Tasks" />
   </ItemGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsPackable>false</IsPackable>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
   </PropertyGroup>
 
   <ItemGroup>
