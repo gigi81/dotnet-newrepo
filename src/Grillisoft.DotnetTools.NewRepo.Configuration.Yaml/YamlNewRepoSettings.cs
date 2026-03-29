@@ -43,7 +43,7 @@ public sealed class YamlNewRepoSettings : INewRepoSettings
     private static Dictionary<ConfigurationKey, object> GetDefaults(IDirectoryInfo root)
     {
         var ret = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
-        if (String.IsNullOrWhiteSpace(ret[ConfigurationKeysManager.Name] as string))
+        if (string.IsNullOrWhiteSpace(ret[ConfigurationKeysManager.Name] as string))
             ret[ConfigurationKeysManager.Name] = root.Name;
 
         return ret;
@@ -87,7 +87,7 @@ public sealed class YamlNewRepoSettings : INewRepoSettings
 
     public Task Init(ILogger logger, CancellationToken cancellationToken)
     {
-        return this.InitFile.WriteAllLinesAsync(GetInitContent());
+        return this.InitFile.WriteAllLinesAsync(GetInitContent(), cancellationToken);
     }
 
     private IEnumerable<string> GetInitContent()
@@ -96,7 +96,8 @@ public sealed class YamlNewRepoSettings : INewRepoSettings
         {
             yield return $"# {value.Key.Help}";
             //TODO: improve this, maybe implement a custom INodeDeserializer for KeyValuePair https://github.com/aaubry/YamlDotNet/issues/249
-            yield return YamlSerializer.Serialize(new Dictionary<string, object>(new[] { new KeyValuePair<string, object>(value.Key.Key, value.Value) }));
+            yield return YamlSerializer.Serialize(
+                new Dictionary<string, object>([new KeyValuePair<string, object>(value.Key.Key, value.Value)]));
         }
     }
 
@@ -149,7 +150,7 @@ public sealed class YamlNewRepoSettings : INewRepoSettings
             ret.Add(Convert.ChangeType(item, itemType));
 
         var array = Array.CreateInstance(itemType, ret.Count);
-        for (int i = 0; i < ret.Count; i++)
+        for (var i = 0; i < ret.Count; i++)
             array.SetValue(Convert.ChangeType(ret[i], itemType), i);
 
         return array;

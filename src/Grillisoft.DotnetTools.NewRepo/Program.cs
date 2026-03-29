@@ -53,15 +53,16 @@ internal sealed class Program
                 else
                     services.AddHostedService<NewRepoService>();
 
-                args = args.Except(new[] { InitCommand }).ToArray();
+                args = args.Except([InitCommand]).ToArray();
 
                 var handler = new HttpClientHandler();
                 handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
                     
                 services.AddHttpClient()
                     .ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(() => handler))
+                    .AddSingleton(args)
                     .AddSingleton<IFileSystem, FileSystem>()
-                    .AddSingleton<INewRepoSettings>(provider => new YamlNewRepoSettings(args, provider.GetRequiredService<IFileSystem>()))
+                    .AddSingleton<INewRepoSettings, YamlNewRepoSettings>()
                     //this MUST be the FIRST one as it creates the main directories
                     .AddSingleton<ICreator, RepositoryCreator>()
                     .AddSingleton<ICreator, GitIgnoreCreator>()
