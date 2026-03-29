@@ -11,154 +11,154 @@ using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml
+namespace Grillisoft.DotnetTools.NewRepo.Configuration.Yaml;
+
+public sealed class YamlNewRepoSettings : INewRepoSettings
 {
-    public sealed class YamlNewRepoSettings : INewRepoSettings
+    private const string InitFilename = "init.yml";
+
+    private readonly IDirectoryInfo _root;
+    private IDictionary<ConfigurationKey, object> _values;
+
+    private static readonly IDeserializer YamlDeserializer = new DeserializerBuilder()
+        .WithNamingConvention(CamelCaseNamingConvention.Instance)
+        .Build();
+
+    private static readonly ISerializer YamlSerializer = new SerializerBuilder()
+        .WithNamingConvention(CamelCaseNamingConvention.Instance)
+        .Build();
+
+    public YamlNewRepoSettings(IFileSystem fileSystem)
     {
-        private const string InitFilename = "init.yml";
+        _root = fileSystem.DirectoryInfo.New(".");
+        _values = GetDefaults(_root);
+    }
 
-        private readonly IDirectoryInfo _root;
-        private IDictionary<ConfigurationKey, object> _values;
+    public YamlNewRepoSettings(string[] args, IFileSystem fileSystem)
+    {
+        _root = fileSystem.DirectoryInfo.New(args.Length > 0 ? args[0] : ".");
+        _values = GetDefaults(_root);
+    }
 
-        private static readonly IDeserializer YamlDeserializer = new DeserializerBuilder()
-                        .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                        .Build();
+    private static Dictionary<ConfigurationKey, object> GetDefaults(IDirectoryInfo root)
+    {
+        var ret = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
+        if (string.IsNullOrWhiteSpace(ret[ConfigurationKeysManager.Name] as string))
+            ret[ConfigurationKeysManager.Name] = root.Name;
 
-        private static readonly ISerializer YamlSerializer = new SerializerBuilder()
-                        .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                        .Build();
+        return ret;
+    }
 
-        public YamlNewRepoSettings(IFileSystem fileSystem)
+    public IDirectoryInfo Root => _root;
+
+    public IFileInfo InitFile => _root.File(InitFilename);
+
+    public T Get<T>(ConfigurationKey key)
+    {
+        return (T)_values[key];
+    }
+
+    public bool GetBool(ConfigurationKey key)
+    {
+        return (bool)_values[key];
+    }
+
+    public int GetInt32(ConfigurationKey key)
+    {
+        return (int)_values[key];
+    }
+
+    public string GetString(ConfigurationKey key)
+    {
+        return (string)_values[key];
+    }
+
+    public bool TryGet<T>(ConfigurationKey key, out T value)
+    {
+        if (!_values.TryGetValue(key, out var tmp))
         {
-            _root = fileSystem.DirectoryInfo.New(".");
-            _values = GetDefaults(_root);
+            value = default(T);
+            return false;
         }
 
-        public YamlNewRepoSettings(string[] args, IFileSystem fileSystem)
+        value = (T)tmp;
+        return true;
+    }
+
+    public Task Init(ILogger logger, CancellationToken cancellationToken)
+    {
+        return this.InitFile.WriteAllLinesAsync(GetInitContent(), cancellationToken);
+    }
+
+    private IEnumerable<string> GetInitContent()
+    {
+        foreach (var value in _values)
         {
-            _root = fileSystem.DirectoryInfo.New(args.Length > 0 ? args[0] : ".");
-            _values = GetDefaults(_root);
+            yield return $"# {value.Key.Help}";
+            //TODO: improve this, maybe implement a custom INodeDeserializer for KeyValuePair https://github.com/aaubry/YamlDotNet/issues/249
+            yield return YamlSerializer.Serialize(
+                new Dictionary<string, object>([new KeyValuePair<string, object>(value.Key.Key, value.Value)]));
+        }
+    }
+
+    public async Task Load(ILogger logger, CancellationToken token)
+    {
+        var init = this.Root.File(InitFilename);
+        if (!init.Exists)
+        {
+            logger.LogWarning($"Settings file {InitFilename} not found. Will use default settings");
+            return;
         }
 
-        private static Dictionary<ConfigurationKey, object> GetDefaults(IDirectoryInfo root)
+        try
         {
-            var ret = ConfigurationKeysManager.Keys.Values.ToDictionary(k => k, k => k.DefaultValue);
-            if (String.IsNullOrWhiteSpace(ret[ConfigurationKeysManager.Name] as string))
-                ret[ConfigurationKeysManager.Name] = root.Name;
-
-            return ret;
-        }
-
-        public IDirectoryInfo Root => _root;
-
-        public IFileInfo InitFile => _root.File(InitFilename);
-
-        public T Get<T>(ConfigurationKey key)
-        {
-            return (T)_values[key];
-        }
-
-        public bool GetBool(ConfigurationKey key)
-        {
-            return (bool)_values[key];
-        }
-
-        public int GetInt32(ConfigurationKey key)
-        {
-            return (int)_values[key];
-        }
-
-        public string GetString(ConfigurationKey key)
-        {
-            return (string)_values[key];
-        }
-
-        public bool TryGet<T>(ConfigurationKey key, out T value)
-        {
-            if (!_values.TryGetValue(key, out var tmp))
+            logger.LogInformation("Loading settings from {0}", init.FullName);
+            using (var stream = init.OpenRead())
+            using (var reader = new StreamReader(stream))
             {
-                value = default(T);
-                return false;
-            }
-
-            value = (T)tmp;
-            return true;
-        }
-
-        public Task Init(ILogger logger, CancellationToken cancellationToken)
-        {
-            return this.InitFile.WriteAllLinesAsync(GetInitContent());
-        }
-
-        private IEnumerable<string> GetInitContent()
-        {
-            foreach (var value in _values)
-            {
-                yield return $"# {value.Key.Help}";
-                //TODO: improve this, maybe implement a custom INodeDeserializer for KeyValuePair https://github.com/aaubry/YamlDotNet/issues/249
-                yield return YamlSerializer.Serialize(new Dictionary<string, object>(new[] { new KeyValuePair<string, object>(value.Key.Key, value.Value) }));
-            }
-        }
-
-        public async Task Load(ILogger logger, CancellationToken token)
-        {
-            var init = this.Root.File(InitFilename);
-            if (!init.Exists)
-            {
-                logger.LogWarning($"Settings file {InitFilename} not found. Will use default settings");
-                return;
-            }
-
-            try
-            {
-                logger.LogInformation("Loading settings from {0}", init.FullName);
-                using (var stream = init.OpenRead())
-                using (var reader = new StreamReader(stream))
-                {
-                    _values = GetValues(await Task.Run(() => YamlDeserializer.Deserialize<Dictionary<string, object>>(reader)));
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Failed to load settings from {init.FullName}: {ex.Message}", ex);
+                _values = GetValues(await Task.Run(() => YamlDeserializer.Deserialize<Dictionary<string, object>>(reader)));
             }
         }
-
-        private IDictionary<ConfigurationKey, object> GetValues(Dictionary<string, object> values)
+        catch (Exception ex)
         {
-            var ret = new Dictionary<ConfigurationKey, object>();
+            throw new Exception($"Failed to load settings from {init.FullName}: {ex.Message}", ex);
+        }
+    }
 
-            foreach(var k in values)
-            {
-                if (!ConfigurationKeysManager.Keys.TryGetValue(k.Key, out var key))
-                    throw new Exception($"Key '{k.Key}' is not a known configuration key");
+    private IDictionary<ConfigurationKey, object> GetValues(Dictionary<string, object> values)
+    {
+        var ret = new Dictionary<ConfigurationKey, object>();
 
-                ret.Add(key, GetValue(k.Value, key.Type));
-            }
+        foreach(var k in values)
+        {
+            if (!ConfigurationKeysManager.Keys.TryGetValue(k.Key, out var key))
+                throw new Exception($"Key '{k.Key}' is not a known configuration key");
 
-            return ret;
+            ret.Add(key, GetValue(k.Value, key.Type));
         }
 
-        private static object GetValue(object value, Type keyType)
-        {
-            if(!keyType.IsEnumerable(out var itemType))
-                return Convert.ChangeType(value, keyType);
+        return ret;
+    }
 
-            var ret = CreateList(itemType);
-            foreach (var item in (IEnumerable)value)
-                ret.Add(Convert.ChangeType(item, itemType));
+    private static object GetValue(object value, Type keyType)
+    {
+        if(!keyType.IsEnumerable(out var itemType))
+            return Convert.ChangeType(value, keyType);
 
-            var array = Array.CreateInstance(itemType, ret.Count);
-            for (int i = 0; i < ret.Count; i++)
-                array.SetValue(Convert.ChangeType(ret[i], itemType), i);
+        var ret = CreateList(itemType);
+        foreach (var item in (IEnumerable)value)
+            ret.Add(Convert.ChangeType(item, itemType));
 
-            return array;
-        }
+        var array = Array.CreateInstance(itemType, ret.Count);
+        for (var i = 0; i < ret.Count; i++)
+            array.SetValue(Convert.ChangeType(ret[i], itemType), i);
 
-        private static IList CreateList(Type itemType)
-        {
-            var genericListType = typeof(List<>).MakeGenericType(itemType);
-            return (IList)Activator.CreateInstance(genericListType);
-        }
+        return array;
+    }
+
+    private static IList CreateList(Type itemType)
+    {
+        var genericListType = typeof(List<>).MakeGenericType(itemType);
+        return (IList)Activator.CreateInstance(genericListType);
     }
 }

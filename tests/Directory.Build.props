@@ -1,0 +1,30 @@
+<Project>
+  <Import Project="..\Directory.Build.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/$(AssemblyName.Replace('.Tests', ''))\$(AssemblyName.Replace('.Tests', '')).csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="TUnit.Core" />
+    <Using Include="TUnit.Assertions" />
+    <Using Include="TUnit.Assertions.Extensions" />
+    <Using Include="AwesomeAssertions" />
+    <Using Include="Microsoft.Extensions.Logging.Abstractions" />
+    <Using Include="System.Threading.Tasks" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="TestableIO.System.IO.Abstractions.TestingHelpers" />
+    <PackageReference Include="TUnit" />
+    <PackageReference Include="AwesomeAssertions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+    <PackageReference Include="GitHubActionsTestLogger" />
+  </ItemGroup>
+</Project>
