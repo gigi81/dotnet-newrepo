@@ -1,4 +1,3 @@
-[![Build Status](https://luigigrilli.visualstudio.com/dotnet-newrepo/_apis/build/status/gigi81.dotnet-newrepo?branchName=master)](https://luigigrilli.visualstudio.com/dotnet-newrepo/_build/latest?definitionId=15&branchName=master)
 [![Nuget][nuget-shield]][nuget-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
@@ -11,10 +10,8 @@
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Roadmap](#roadmap)
 - [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
 
 ## About The Project
 There is an [unofficial standard structure](https://gist.github.com/davidfowl/ed7564297c61fe9ab814) when it comes to dotnet repositories.
