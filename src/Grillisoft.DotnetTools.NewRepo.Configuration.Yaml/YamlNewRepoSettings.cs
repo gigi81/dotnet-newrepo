@@ -27,13 +27,7 @@ public sealed class YamlNewRepoSettings : INewRepoSettings
     private static readonly ISerializer YamlSerializer = new SerializerBuilder()
         .WithNamingConvention(CamelCaseNamingConvention.Instance)
         .Build();
-
-    public YamlNewRepoSettings(IFileSystem fileSystem)
-    {
-        _root = fileSystem.DirectoryInfo.New(".");
-        _values = GetDefaults(_root);
-    }
-
+    
     public YamlNewRepoSettings(string[] args, IFileSystem fileSystem)
     {
         _root = fileSystem.DirectoryInfo.New(args.Length > 0 ? args[0] : ".");

@@ -21,7 +21,7 @@ public class IssueTrackerCreator : CreatorBase
     {
         if (string.IsNullOrWhiteSpace(_settings.GithubUrl))
         {
-            _logger.LogInformation($"Skipping {Name} creation. Not github settings specified");
+            _logger.LogInformation($"Skipping {Name} creation. No github settings specified");
             return;
         }
 

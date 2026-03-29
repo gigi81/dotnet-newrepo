@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using System.IO.Abstractions;
 
 namespace Grillisoft.DotnetTools.NewRepo.Creators.Impl;
 
@@ -36,18 +37,29 @@ public class DotnetCreator : CreatorBase
         foreach (var project in projects)
             await Run("dotnet", "sln add " + project, cancellationToken);
 
-        var solution = this.Root.GetFiles("*.sln").First();
-        var content = PatchContent(await solution.ReadAllLinesAsync(cancellationToken));
-        await solution.WriteAllLinesAsync(content, cancellationToken);
+        var solution = this.Root.GetFiles("*.sln*").First();
+        var isSolutionX = solution.Extension.Equals(".slnx", StringComparison.OrdinalIgnoreCase);
+        
+        if(!isSolutionX)
+            await PatchSolutionFile(solution, cancellationToken);
 
-        if (_settings.EnableSlnx)
+        if (!isSolutionX && _settings.EnableSlnx)
         {
             await Run("dotnet", "sln migrate", cancellationToken);
             solution.Delete();
         }
     }
 
-    private List<string> PatchContent(IEnumerable<string> lines)
+    private async Task PatchSolutionFile(IFileInfo solution, CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Patching solution file {SolutionPath}", solution.FullName);
+        
+        var lines = await solution.ReadAllLinesAsync(cancellationToken);
+        var content = PatchSolutionLines(lines);
+        await solution.WriteAllLinesAsync(content, cancellationToken);
+    }
+
+    private List<string> PatchSolutionLines(IEnumerable<string> lines)
     {
         var ret = new List<string>();
 
@@ -55,7 +67,7 @@ public class DotnetCreator : CreatorBase
         {
             if (line.Equals("Global"))
             {
-                ret.AddRange(new[] {
+                ret.AddRange([
                     "Project(\"{2150E333-8FDC-42A3-9474-1A3956D46DE8}\") = \"Solution Items\", \"Solution Items\", \"{" + Guid.NewGuid() + "}\"",
                     "\tProjectSection(SolutionItems) = preProject",
                     "\t\tDirectory.Build.props = Directory.Build.props",
@@ -64,7 +76,7 @@ public class DotnetCreator : CreatorBase
                     "\t\tREADME.md = README.md",
                     "\tEndProjectSection",
                     "EndProject"
-                });
+                ]);
             }
 
             ret.Add(line);
@@ -73,19 +85,19 @@ public class DotnetCreator : CreatorBase
             {
                 if(line.Contains("src"))
                 {
-                    ret.AddRange(new[] {
+                    ret.AddRange([
                         "\tProjectSection(SolutionItems) = preProject",
                         "\t\tsrc\\Directory.Build.props = src\\Directory.Build.props",
                         "\tEndProjectSection"
-                    });
+                    ]);
                 }
                 else if (line.Contains("tests"))
                 {
-                    ret.AddRange(new[] {
+                    ret.AddRange([
                         "\tProjectSection(SolutionItems) = preProject",
                         "\t\ttests\\Directory.Build.props = tests\\Directory.Build.props",
                         "\tEndProjectSection"
-                    });
+                    ]);
                 }
             }
         }

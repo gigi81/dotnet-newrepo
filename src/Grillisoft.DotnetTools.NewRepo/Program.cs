@@ -41,12 +41,12 @@ internal sealed class Program
             {
                 options.SuppressStatusMessages = true;
             })
-            .UseSerilog((hostingContext, services, loggerConfiguration) =>
+            .UseSerilog((_, _, loggerConfiguration) =>
             {
                 loggerConfiguration.Enrich.FromLogContext()
                     .WriteTo.Console();
             })
-            .ConfigureServices((hostContext, services) =>
+            .ConfigureServices((_, services) =>
             {
                 if (args.Contains(InitCommand))
                     services.AddHostedService<InitService>();
