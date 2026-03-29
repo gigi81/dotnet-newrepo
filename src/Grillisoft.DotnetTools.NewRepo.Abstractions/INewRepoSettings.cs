@@ -20,6 +20,7 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         string GithubUrl => string.IsNullOrWhiteSpace(this.Github) ? null : $"https://github.com/{Github}.git";
         string AzureDevOpsGitRemoteUrl => GetString(ConfigurationKeysManager.AzureDevOpsGitRemoteUrl);
         bool AzureDevOpsBuild => GetBool(ConfigurationKeysManager.AzureDevOpsBuild);
+        bool GithubActionsBuild => GetBool(ConfigurationKeysManager.GithubActionsBuild);
         string[] GitIgnoreTags => Get<string[]>(ConfigurationKeysManager.IgnoreTags);
         string License => GetString(ConfigurationKeysManager.License);
         string Name => GetString(ConfigurationKeysManager.Name);

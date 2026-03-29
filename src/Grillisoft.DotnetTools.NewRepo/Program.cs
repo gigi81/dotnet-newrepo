@@ -71,6 +71,7 @@ namespace Grillisoft.DotnetTools.NewRepo
                             .AddSingleton<ICreator, LicenseCreator>()
                             .AddSingleton<ICreator, ReadmeCreator>()
                             .AddSingleton<ICreator, AzurePipelinesCreator>()
+                            .AddSingleton<ICreator, GithubActionsCreator>()
                             .AddSingleton<ICreator, IssueTrackerCreator>()
                             .AddSingleton<ICreator, BenchmarkDotNetCreator>()
                             //this MUST be the LAST one as it initialize the git repo and does initial commit

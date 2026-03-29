@@ -19,6 +19,8 @@ namespace Grillisoft.DotnetTools.NewRepo.Abstractions
         public static readonly ConfigurationKey AzureDevOpsGitRemoteUrl = StringKey("adourl", "Your Azure DevOps url (ex. https://organization.visualstudio.com/DefaultCollection/project/_git/reponame)");
         public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", false);
 
+        public static readonly ConfigurationKey GithubActionsBuild = BoolKey("githubactions", "Set to true if you plan to build the project in GitHub Actions", false);
+
         public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
         public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
 

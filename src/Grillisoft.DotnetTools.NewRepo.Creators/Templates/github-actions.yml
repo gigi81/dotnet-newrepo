@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, 'release/**' ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.x'
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration ${{ env.BUILD_CONFIGURATION }} --no-restore /p:Version=1.0.0.${{ github.run_number }} /p:PackageOutputPath="${{ github.workspace }}/artifacts"
+
+    - name: Test
+      run: dotnet test --configuration ${{ env.BUILD_CONFIGURATION }} --no-build --collect "Code coverage" -p:ParallelizeTestCollections=true
+
+    - name: Push to GitHub Packages
+      if: github.event_name == 'push'
+      run: dotnet nuget push "artifacts/*.nupkg" --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+
+    - name: Push to NuGet.org
+      if: startsWith(github.ref, 'refs/heads/release/')
+      run: dotnet nuget push "artifacts/*.nupkg" --source "https://api.nuget.org/v3/index.json" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate
