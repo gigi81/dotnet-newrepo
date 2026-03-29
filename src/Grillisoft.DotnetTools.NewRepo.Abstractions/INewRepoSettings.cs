@@ -4,45 +4,44 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Grillisoft.DotnetTools.NewRepo.Abstractions
+namespace Grillisoft.DotnetTools.NewRepo.Abstractions;
+
+public interface INewRepoSettings
 {
-    public interface INewRepoSettings
-    {
-        IDirectoryInfo Root { get; }
+    IDirectoryInfo Root { get; }
 
-        IFileInfo InitFile { get; }
+    IFileInfo InitFile { get; }
 
-        bool Appveyor => GetBool(ConfigurationKeysManager.Appveyor);
-        string Authors => GetString(ConfigurationKeysManager.Authors);
-        bool Benchmark => GetBool(ConfigurationKeysManager.Benchmark);
-        string CopyrightYear => GetString(ConfigurationKeysManager.CopyrightYears);
-        string Github => GetString(ConfigurationKeysManager.Github);
-        string GithubUrl => string.IsNullOrWhiteSpace(this.Github) ? null : $"https://github.com/{Github}.git";
-        string AzureDevOpsGitRemoteUrl => GetString(ConfigurationKeysManager.AzureDevOpsGitRemoteUrl);
-        bool AzureDevOpsBuild => GetBool(ConfigurationKeysManager.AzureDevOpsBuild);
-        bool GithubActionsBuild => GetBool(ConfigurationKeysManager.GithubActionsBuild);
-        string[] GitIgnoreTags => Get<string[]>(ConfigurationKeysManager.IgnoreTags);
-        string License => GetString(ConfigurationKeysManager.License);
-        string Name => GetString(ConfigurationKeysManager.Name);
-        string Product => GetString(ConfigurationKeysManager.Product);
-        string TestFramework => GetString(ConfigurationKeysManager.TestFramework);
-        string TwitterUsername => GetString(ConfigurationKeysManager.Twitter);
-        bool EmptyReadme => GetBool(ConfigurationKeysManager.EmptyReadme);
-        bool EnableSlnx => GetBool(ConfigurationKeysManager.EnableSlnx);
-        string GitRemoteUrl => new[] { this.GithubUrl, this.AzureDevOpsGitRemoteUrl }
-            .FirstOrDefault(u => !string.IsNullOrWhiteSpace(u));
-        string GetString(ConfigurationKey key);
+    bool Appveyor => GetBool(ConfigurationKeysManager.Appveyor);
+    string Authors => GetString(ConfigurationKeysManager.Authors);
+    bool Benchmark => GetBool(ConfigurationKeysManager.Benchmark);
+    string CopyrightYear => GetString(ConfigurationKeysManager.CopyrightYears);
+    string Github => GetString(ConfigurationKeysManager.Github);
+    string GithubUrl => string.IsNullOrWhiteSpace(this.Github) ? null : $"https://github.com/{Github}.git";
+    string AzureDevOpsGitRemoteUrl => GetString(ConfigurationKeysManager.AzureDevOpsGitRemoteUrl);
+    bool AzureDevOpsBuild => GetBool(ConfigurationKeysManager.AzureDevOpsBuild);
+    bool GithubActionsBuild => GetBool(ConfigurationKeysManager.GithubActionsBuild);
+    string[] GitIgnoreTags => Get<string[]>(ConfigurationKeysManager.IgnoreTags);
+    string License => GetString(ConfigurationKeysManager.License);
+    string Name => GetString(ConfigurationKeysManager.Name);
+    string Product => GetString(ConfigurationKeysManager.Product);
+    string TestFramework => GetString(ConfigurationKeysManager.TestFramework);
+    string TwitterUsername => GetString(ConfigurationKeysManager.Twitter);
+    bool EmptyReadme => GetBool(ConfigurationKeysManager.EmptyReadme);
+    bool EnableSlnx => GetBool(ConfigurationKeysManager.EnableSlnx);
+    string GitRemoteUrl => new[] { this.GithubUrl, this.AzureDevOpsGitRemoteUrl }
+        .FirstOrDefault(u => !string.IsNullOrWhiteSpace(u));
+    string GetString(ConfigurationKey key);
 
-        int GetInt32(ConfigurationKey key);
+    int GetInt32(ConfigurationKey key);
 
-        bool GetBool(ConfigurationKey key);
+    bool GetBool(ConfigurationKey key);
 
-        T Get<T>(ConfigurationKey key);
+    T Get<T>(ConfigurationKey key);
 
-        bool TryGet<T>(ConfigurationKey key, out T value);
+    bool TryGet<T>(ConfigurationKey key, out T value);
 
-        Task Load(ILogger logger, CancellationToken cancellationToken);
+    Task Load(ILogger logger, CancellationToken cancellationToken);
 
-        Task Init(ILogger logger, CancellationToken cancellationToken);
-    }
+    Task Init(ILogger logger, CancellationToken cancellationToken);
 }

@@ -2,70 +2,69 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Grillisoft.DotnetTools.NewRepo.Abstractions
+namespace Grillisoft.DotnetTools.NewRepo.Abstractions;
+
+public class ConfigurationKeysManager
 {
-    public class ConfigurationKeysManager
-    {
-        public static readonly ConfigurationKey Name = StringKey("name", "Project name (ex. YourOrganization.Project)");
-        public static readonly ConfigurationKey Authors = StringKey("authors", "Authors of the project, this could be your name or your company Name");
-        public static readonly ConfigurationKey Product = StringKey("product", "Product description");
-        public static readonly ConfigurationKey Github = StringKey("github", "The github repository name where this project will be hosted (ex. yourUsername/repo)");
-        public static readonly ConfigurationKey CopyrightYears = StringKey("copyrightYears", "Copyright years (ex. 2021 or 2010-2021)", DateTime.Now.Year.ToString());
-        public static readonly ConfigurationKey License = StringKey("license", "The project license's SPDX identifier or 'none' for no explicit license. Only OSI and FSF approved licenses supported, see https://spdx.org/licenses/", "MIT");
-        public static readonly ConfigurationKey TestFramework = StringKey("testFramework", "Your test framework of choice (ex xunit or nunit)", "xunit");
-        public static readonly ConfigurationKey IgnoreTags = new ConfigurationKey("ignoreTags", typeof(string[]), "Tags used to generate the .gitignore file, see https://www.toptal.com/developers/gitignore", new[] { "csharp", "visualstudio", "visualstudiocode", "rider", "node" });
-        public static readonly ConfigurationKey Benchmark = BoolKey("benchmark", "Set to true if you want a BenchmarkDotnet project added to the solution", false);
+    public static readonly ConfigurationKey Name = StringKey("name", "Project name (ex. YourOrganization.Project)");
+    public static readonly ConfigurationKey Authors = StringKey("authors", "Authors of the project, this could be your name or your company Name");
+    public static readonly ConfigurationKey Product = StringKey("product", "Product description");
+    public static readonly ConfigurationKey Github = StringKey("github", "The github repository name where this project will be hosted (ex. yourUsername/repo)");
+    public static readonly ConfigurationKey CopyrightYears = StringKey("copyrightYears", "Copyright years (ex. 2021 or 2010-2021)", DateTime.Now.Year.ToString());
+    public static readonly ConfigurationKey License = StringKey("license", "The project license's SPDX identifier or 'none' for no explicit license. Only OSI and FSF approved licenses supported, see https://spdx.org/licenses/", "MIT");
+    public static readonly ConfigurationKey TestFramework = StringKey("testFramework", "Your test framework of choice (ex xunit or nunit)", "xunit");
+    public static readonly ConfigurationKey IgnoreTags = new ConfigurationKey("ignoreTags", typeof(string[]), "Tags used to generate the .gitignore file, see https://www.toptal.com/developers/gitignore", new[] { "csharp", "visualstudio", "visualstudiocode", "rider", "node" });
+    public static readonly ConfigurationKey Benchmark = BoolKey("benchmark", "Set to true if you want a BenchmarkDotnet project added to the solution", false);
 
-        public static readonly ConfigurationKey AzureDevOpsGitRemoteUrl = StringKey("adourl", "Your Azure DevOps url (ex. https://organization.visualstudio.com/DefaultCollection/project/_git/reponame)");
-        public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", false);
+    public static readonly ConfigurationKey AzureDevOpsGitRemoteUrl = StringKey("adourl", "Your Azure DevOps url (ex. https://organization.visualstudio.com/DefaultCollection/project/_git/reponame)");
+    public static readonly ConfigurationKey AzureDevOpsBuild = BoolKey("adobuild", "Set to true if you plan to build the project in Azure DevOps Pipelines", false);
 
-        public static readonly ConfigurationKey GithubActionsBuild = BoolKey("githubactions", "Set to true if you plan to build the project in GitHub Actions", false);
+    public static readonly ConfigurationKey GithubActionsBuild = BoolKey("githubactions", "Set to true if you plan to build the project in GitHub Actions", false);
 
-        public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
-        public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
+    public static readonly ConfigurationKey Appveyor = BoolKey("appveyor", "Set to true if you plan to build the project in appveyor", false);
+    public static readonly ConfigurationKey Twitter = StringKey("twitter", "Your Twitter account handle (ex. @john)");
 
-        public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", true);
+    public static readonly ConfigurationKey EmptyReadme = BoolKey("emptyReadme", "Set to true if you want a minimal or empty readme", true);
         
-        public static readonly ConfigurationKey EnableSlnx = BoolKey("enableSlnx", "Set to true if you want to use the slnx format for the solution file instead of the classic sln format", true);
+    public static readonly ConfigurationKey EnableSlnx = BoolKey("enableSlnx", "Set to true if you want to use the slnx format for the solution file instead of the classic sln format", true);
 
-        public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new(GetKeys);
+    public static readonly Lazy<IDictionary<string, ConfigurationKey>> _keys = new(GetKeys);
 
-        public static IDictionary<string, ConfigurationKey> Keys => _keys.Value;
+    public static IDictionary<string, ConfigurationKey> Keys => _keys.Value;
 
-        private static Dictionary<string, ConfigurationKey> GetKeys()
+    private static Dictionary<string, ConfigurationKey> GetKeys()
+    {
+        var keys = typeof(ConfigurationKeysManager).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
+            .Where(f => f.FieldType == typeof(ConfigurationKey))
+            .Select(f => f.GetValue(null) as ConfigurationKey);
+
+        var ret = new Dictionary<string, ConfigurationKey>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var key in keys)
+            ret.Add(key.Key, key);
+
+        return ret;
+    }
+
+    private static ConfigurationKey StringKey(string name, string help, object defaultValue = null)
+    {
+        return new ConfigurationKey
         {
-            var keys = typeof(ConfigurationKeysManager).GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static)
-                        .Where(f => f.FieldType == typeof(ConfigurationKey))
-                        .Select(f => f.GetValue(null) as ConfigurationKey);
+            Key = name,
+            Type = typeof(string),
+            Help = help,
+            DefaultValue = defaultValue ?? String.Empty
+        };
+    }
 
-            var ret = new Dictionary<string, ConfigurationKey>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (var key in keys)
-                ret.Add(key.Key, key);
-
-            return ret;
-        }
-
-        private static ConfigurationKey StringKey(string name, string help, object defaultValue = null)
+    private static ConfigurationKey BoolKey(string name, string help, object defaultValue = null)
+    {
+        return new ConfigurationKey
         {
-            return new ConfigurationKey
-            {
-                Key = name,
-                Type = typeof(string),
-                Help = help,
-                DefaultValue = defaultValue ?? String.Empty
-            };
-        }
-
-        private static ConfigurationKey BoolKey(string name, string help, object defaultValue = null)
-        {
-            return new ConfigurationKey
-            {
-                Key = name,
-                Type = typeof(bool),
-                Help = help,
-                DefaultValue = defaultValue
-            };
-        }
+            Key = name,
+            Type = typeof(bool),
+            Help = help,
+            DefaultValue = defaultValue
+        };
     }
 }

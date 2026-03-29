@@ -11,72 +11,71 @@ using System.IO.Abstractions;
 using System.Net;
 using System.Net.Http;
 
-namespace Grillisoft.DotnetTools.NewRepo
+namespace Grillisoft.DotnetTools.NewRepo;
+
+internal sealed class Program
 {
-    internal sealed class Program
+    const string InitCommand = "init";
+
+    static async Task Main(string[] args)
     {
-        const string InitCommand = "init";
-
-        static async Task Main(string[] args)
+        try
         {
-            try
-            {
-                await CreateHostBuilder(args).RunConsoleAsync();
-            }
-            catch(Exception ex)
-            {
-                if(Environment.ExitCode == ExitCode.Ok)
-                    Environment.ExitCode = ExitCode.GenericError;
-
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex);
-            }
+            await CreateHostBuilder(args).RunConsoleAsync();
         }
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        catch(Exception ex)
         {
-            return Host.CreateDefaultBuilder(args)
-                //ctrl+C support
-                .UseConsoleLifetime(options =>
-                {
-                    options.SuppressStatusMessages = true;
-                })
-                .UseSerilog((hostingContext, services, loggerConfiguration) =>
-                {
-                    loggerConfiguration.Enrich.FromLogContext()
-                                       .WriteTo.Console();
-                })
-                .ConfigureServices((hostContext, services) =>
-                {
-                    if (args.Contains(InitCommand))
-                        services.AddHostedService<InitService>();
-                    else
-                        services.AddHostedService<NewRepoService>();
+            if(Environment.ExitCode == ExitCode.Ok)
+                Environment.ExitCode = ExitCode.GenericError;
 
-                    args = args.Except(new[] { InitCommand }).ToArray();
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex);
+        }
+    }
 
-                    var handler = new HttpClientHandler();
-                    handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+    private static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
+            //ctrl+C support
+            .UseConsoleLifetime(options =>
+            {
+                options.SuppressStatusMessages = true;
+            })
+            .UseSerilog((hostingContext, services, loggerConfiguration) =>
+            {
+                loggerConfiguration.Enrich.FromLogContext()
+                    .WriteTo.Console();
+            })
+            .ConfigureServices((hostContext, services) =>
+            {
+                if (args.Contains(InitCommand))
+                    services.AddHostedService<InitService>();
+                else
+                    services.AddHostedService<NewRepoService>();
+
+                args = args.Except(new[] { InitCommand }).ToArray();
+
+                var handler = new HttpClientHandler();
+                handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
                     
-                    services.AddHttpClient()
-                            .ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(() => handler))
-                            .AddSingleton<IFileSystem, FileSystem>()
-                            .AddSingleton<INewRepoSettings>(provider => new YamlNewRepoSettings(args, provider.GetRequiredService<IFileSystem>()))
-                            //this MUST be the FIRST one as it creates the main directories
-                            .AddSingleton<ICreator, RepositoryCreator>()
-                            .AddSingleton<ICreator, GitIgnoreCreator>()
-                            .AddSingleton<ICreator, GitAttributesCreator>()
-                            .AddSingleton<ICreator, DirectoryBuildPropsCreator>()
-                            .AddSingleton<ICreator, DotnetCreator>()
-                            .AddSingleton<ICreator, LicenseCreator>()
-                            .AddSingleton<ICreator, ReadmeCreator>()
-                            .AddSingleton<ICreator, AzurePipelinesCreator>()
-                            .AddSingleton<ICreator, GithubActionsCreator>()
-                            .AddSingleton<ICreator, IssueTrackerCreator>()
-                            .AddSingleton<ICreator, BenchmarkDotNetCreator>()
-                            //this MUST be the LAST one as it initialize the git repo and does initial commit
-                            .AddSingleton<ICreator, GitCreator>();
-                });
-        }
+                services.AddHttpClient()
+                    .ConfigureHttpClientDefaults(builder => builder.ConfigurePrimaryHttpMessageHandler(() => handler))
+                    .AddSingleton<IFileSystem, FileSystem>()
+                    .AddSingleton<INewRepoSettings>(provider => new YamlNewRepoSettings(args, provider.GetRequiredService<IFileSystem>()))
+                    //this MUST be the FIRST one as it creates the main directories
+                    .AddSingleton<ICreator, RepositoryCreator>()
+                    .AddSingleton<ICreator, GitIgnoreCreator>()
+                    .AddSingleton<ICreator, GitAttributesCreator>()
+                    .AddSingleton<ICreator, DirectoryBuildPropsCreator>()
+                    .AddSingleton<ICreator, DotnetCreator>()
+                    .AddSingleton<ICreator, LicenseCreator>()
+                    .AddSingleton<ICreator, ReadmeCreator>()
+                    .AddSingleton<ICreator, AzurePipelinesCreator>()
+                    .AddSingleton<ICreator, GithubActionsCreator>()
+                    .AddSingleton<ICreator, IssueTrackerCreator>()
+                    .AddSingleton<ICreator, BenchmarkDotNetCreator>()
+                    //this MUST be the LAST one as it initialize the git repo and does initial commit
+                    .AddSingleton<ICreator, GitCreator>();
+            });
     }
 }

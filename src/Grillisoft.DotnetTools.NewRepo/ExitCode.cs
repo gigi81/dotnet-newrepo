@@ -1,8 +1,7 @@
-﻿namespace Grillisoft.DotnetTools.NewRepo
+﻿namespace Grillisoft.DotnetTools.NewRepo;
+
+public static class ExitCode
 {
-    public static class ExitCode
-    {
-        public const int Ok = 0;
-        public const int GenericError = -1;
-    }
+    public const int Ok = 0;
+    public const int GenericError = -1;
 }
