@@ -1,9 +1,9 @@
-using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
-using Grillisoft.DotnetTools.NewRepo.Creators.Tests.Fakes;
 using System.IO.Abstractions.TestingHelpers;
 using System.Threading;
+using Grillisoft.DotnetTools.NewRepo.Creators.Impl;
+using Grillisoft.DotnetTools.NewRepo.Creators.Tests.Fakes;
 
-namespace Grillisoft.DotnetTools.NewRepo.Creators.Tests;
+namespace Grillisoft.DotnetTools.NewRepo.Creators.Tests.Impl;
 
 public class IssueTrackerCreatorTests
 {
