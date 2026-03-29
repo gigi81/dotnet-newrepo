@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <Version>1.1.0</Version>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <Authors>Luigi Grilli</Authors>
     <Product>dotnet tool to create a new git repository structure</Product>
@@ -10,6 +10,5 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
 </Project>
